@@ -1,0 +1,55 @@
+{# 导入static 目录 #}
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    {# bootstrap基本配置 #}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
+    {# title #}
+    <title>DjBlog</title>
+
+    {# 导入bootstrap，初始化css #}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/reset.css' %}"/>
+
+    {#    用于子模型中扩展自己的css#}
+    {% block extCss %}
+    {% endblock %}
+
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+{# 头 #}
+{% block header %}
+{% endblock %}
+{# 内容#}
+{% block content %}
+{% endblock %}
+{# 脚#}
+{% block footer %}
+{% endblock %}
+
+{# 导入jquery bootstrap-js #}
+
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+{# bootCDN好像挂掉了 #}
+
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>#}
+{#<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>#}
+{#<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+
+{# 子模型中扩展js #}
+{% block extJs %}
+{% endblock %}
+</body>
+</html>

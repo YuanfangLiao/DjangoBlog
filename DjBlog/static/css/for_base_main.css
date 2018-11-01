@@ -1,0 +1,84 @@
+body {
+    /*background-color: rgba(210, 210, 210, 0.9);*/
+    background: url("../img/bg.jpg") repeat;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+div {
+    /*border-radius: 5px;*/
+    /*box-shadow: 0 0 3px #000;*/
+}
+
+/*手机的话，右边的button初始化*/
+#phone_right_button{
+    margin-right: 25px;
+}
+
+/*导航栏圆弧*/
+.navbar.navbar-inverse {
+    border-radius: 0 0 60px 60px;
+}
+
+/* 导航的字号 */
+#my_nav_bar {
+    font-size: 15px;
+}
+
+/*商标发光*/
+#my_brand{
+    color: #857e71;
+    font-weight: bolder;
+    text-shadow: 0 0 1px black;
+}
+
+/* 注册或登陆的字号*/
+#register_or_login {
+    font-size: 12px;
+}
+
+/*容器最小长度*/
+#content {
+    height: auto !important;
+    width: 80%;
+    margin: 0 auto 20px;
+    /*overflow: auto;*/
+}
+
+.main-content {
+    /*background-color: antiquewhite;*/
+}
+
+.sidebar {
+    /*background-color: cadetblue;*/
+}
+
+.widget {
+    background-color: #ffffff;
+    padding: 15px;
+
+}
+
+/* 页尾 */
+.copyright {
+    background: #111;
+    font-size: 15px;
+    text-align: center;
+    color: #9d9d9d;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid #303030;
+    border-radius: 60px 60px 0 0;
+}
+
+/* 页尾的字体 */
+a {
+    text-decoration: none;
+    outline: none;
+}
+
+.copyright a {
+    color: #9d9d9d;
+}
+

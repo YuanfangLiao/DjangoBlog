@@ -1,0 +1,93 @@
+<div id="main_con">
+    <form style="padding: 3rem">
+        {% csrf_token %}
+        <div class="alert alert-danger" role="alert" id="warning_alert" style="display: none">...</div>
+        <fieldset disabled>
+            <div class="form-group">
+                <label class="control-label" for="user_id">*用户名:</label>
+                <input type="text" class="form-control" name="user_id" id="user_id"
+                       required="required" aria-describedby="helpBlock2" value="{{ user.user_id }}">
+            </div>
+        </fieldset>
+        <br/>
+        <div class="form-group">
+            <label class="control-label" for="user_sex">*性别:</label>
+            <label class="radio-inline">
+                <input type="radio" name="user_sex" id="user_sex" value="1"
+                        {% ifequal user.user_sex 1 %} checked="checked" {% endifequal %} > 男
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="user_sex" id="user_sex1" value="0"
+                        {% ifequal user.user_sex 0 %} checked="checked" {% endifequal %} > 女
+            </label>
+        </div>
+        <br/>
+
+        <fieldset disabled>
+            <div class="form-group">
+                <label class="control-label" for="user_phone">手机号:</label>
+                <input type="text" class="form-control" name="user_phone" id="user_phone"
+                       aria-describedby="helpBlock2" {% if user.user_phone %}value="{{ user.user_phone }}"{% endif %}>
+            </div>
+        </fieldset>
+        <input type="button" class="btn btn-info" id="go_change_phone" value="修改手机号">
+        <br/><br/>
+
+        <fieldset disabled>
+            <div class="form-group">
+                <label class="control-label" for="user_email">邮箱号:</label>
+                <input type="text" class="form-control " name="user_email" id="user_email"
+                       aria-describedby="helpBlock2" value="{{ user.user_email }}"
+                       pattern="^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$">
+            </div>
+        </fieldset>
+        <input type="button" class="btn btn-info" id="go_change_email" value="修改邮箱">
+
+        {#        <input disabled="disabled" type="button" id="do_submit" value="提交" class="btn btn-info" style="width: 100px;">#}
+    </form>
+</div>
+
+
+<script>
+    $(function () {
+        {# 载入成功后把active改为本页面 #}
+        $(".list-group-item").removeClass('active');
+        $('#change_profile').addClass('active');
+
+        {#去修改phone#}
+        $('#go_change_phone').click(function () {
+            {# 最后那个是传进去的参数 #}
+            $('#main_con').load('/users/go_user_center_somewhere/for_change_profile/change_phone.html/')
+        });
+
+        {#去修改email#}
+        $('#go_change_email').click(function () {
+            {# 最后那个是传进去的参数 #}
+            $('#main_con').load('/users/go_user_center_somewhere/for_change_profile/change_email.html/')
+        });
+
+        {# 点击性别时修改性别 #}
+        $('input[name=user_sex]').change(function () {
+            sex = $(this).val();
+            //发送ajax请求要求修改性别
+            $.ajax({
+                url: '{% url 'users:do_change_sex' %}',
+                type: 'post',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    sex: sex
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data['code'])
+                },
+                error: function (xhr, status, err) {
+                    alert("抱歉，服务器出了点小问题TAT,快联系作者上报bug吧TAT");
+                    console.log(xhr.responseText);
+                    console.log(status);
+                    console.log(err);
+                }
+             })
+        })
+    });
+</script>

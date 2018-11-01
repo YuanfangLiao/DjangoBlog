@@ -1,0 +1,132 @@
+{# 继承模版 #}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extCss %}
+    {{ block.super }}
+    {# SwiperCss #}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/swiper.min.css' %}"/>
+    {#    <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.0/css/swiper.min.css" rel="stylesheet">#}
+    {# 载入主页css文件 #}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/for_base_main.css' %}"/>
+{% endblock %}
+{% block extJs %}
+    {{ block.super }}
+    {# Swiper轮播图 #}
+    <script type="text/javascript" src="{% static 'js/swiper.min.js' %}"></script>
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.0/js/swiper.min.js"></script>#}
+    <script type="text/javascript" src="{% static 'js/my_swiper.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/for_base_main.js' %}"></script>
+{% endblock %}
+
+{# 头 #}
+{% block header %}
+    {# 标题栏 #}
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" id="phone_right_button" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" id="my_brand" href="#">DjBlog by Gople</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="margin-left: 180px">
+                <ul class="nav navbar-nav" id="my_nav_bar">
+                    <li class="active"><a href="{% url 'blog:index' %}"><span class="glyphicon glyphicon-home"
+                                                                              aria-hidden="true"></span>
+                        主页 <span class="sr-only">(current)</span></a></li>
+
+                    {# 这里判断导航栏有几个分类 大于三个展开下拉菜单 #}
+                    {% if navs %}
+                        {% if "{{ navs|length }}" < 4 %}
+                            {% for nav in navs %}
+                                {% if forloop.counter < 4 %}
+                                    <li><a href="#">{{ nav.name }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% for nav in navs|slice:":3" %}
+                                <li><a href="#">{{ nav.name }}</a></li>
+                            {% endfor %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true"
+                                   aria-expanded="false">More <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    {% for nav in navs|slice:"3:" %}
+                                        <li><a href="#">{{ nav.name }}</a></li>
+                                        {% ifnotequal forloop.counter navs|slice:"3:"|length %}
+                                            <li role="separator" class="divider"></li>
+                                        {% endifnotequal %}
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+
+
+                </ul>
+                <!--<form class="navbar-form navbar-left">-->
+                <!--<div class="form-group">-->
+                <!--<input type="text" class="form-control" placeholder="Search">-->
+                <!--</div>-->
+                <!--<button type="submit" class="btn btn-default">Submit</button>-->
+                <!--</form>-->
+                <ul class="nav navbar-nav navbar-right" id="register_or_login">
+                    {# 如果已经登陆了，显示个人中心 #}
+                    {% if uid %}
+                        <li><a href="{% url 'users:go_personal_center' %}">个人中心</a></li>
+                        <li class="dropdown">
+
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true"
+                               aria-expanded="false">{{ uid }}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                {% if user.user_is_admin %}
+                                    <li><a href="{% url 'blog:post_new_blog' %}">发布博客</a></li>
+                                    <li role="separator" class="divider"></li>
+                                {% endif %}
+
+                                <li><a href="{% url 'users:do_log_out' %}">退出登陆</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'users:go_register_page' %}">注册</a></li>
+                        <li><a href="{% url 'users:go_login_page' %}">登陆</a></li>
+                    {% endif %}
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+{% endblock %}
+
+
+{% block content %}
+    <div id="content">
+        {% block content_detail %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+
+{% block footer %}
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12"><span>Copyright © <a href="#">DjBlog</a></span> |
+                    <span><a href="#">By Gople</a></span> |
+                    <span>基于<a href="https://v3.bootcss.com/" target="_blank">Bootstrap3</a>
+                        <a href="https://www.djangoproject.com/" target="_blank">Django2</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,22 @@
+
+
+<form action="{% url 'users:do_change_img' %}" enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    <input type="file" name="img">
+    <input type="submit">
+</form>
+
+<div class="row" style="height: 500px">
+<input id="file-Portrait1" type="file">
+</div>
+<h1>{{ user.user_id }}</h1>
+
+
+
+<script>
+    $(function () {
+        {# 载入成功后把active改为本页面 #}
+        $(".list-group-item").removeClass('active');
+        $('#change_img').addClass('active')
+    });
+</script>

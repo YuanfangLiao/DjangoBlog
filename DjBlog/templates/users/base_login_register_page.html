@@ -1,0 +1,8 @@
+{% extends 'base_main.html' %}
+{% load static %}
+
+{% block extJs %}
+    {{ block.super }}
+    {#  注册和登陆界面宽度设定  #}
+    <script type="text/javascript" src="{% static 'js/users/for_login_register.js' %}"></script>
+{% endblock %}

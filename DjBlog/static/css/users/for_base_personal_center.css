@@ -1,0 +1,32 @@
+#all_personal_center {
+    margin-top: 6rem;
+}
+
+#personal_center_content {
+    width: 100%;
+    padding: 20px;
+    height: 50rem;
+    background-color: white;
+    box-shadow: 0 0 0.1rem #000;
+}
+
+#right_part .list-group {
+    box-shadow: 0 0 0.1rem #000;
+}
+
+#right_part a p {
+    font-size: 1rem;
+}
+
+#personal_img {
+    height: 100px;
+    background-color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+#personal_img img {
+    width: 60px;
+    height: 60px;
+    box-shadow: 0 0 0.2rem #000;
+}
