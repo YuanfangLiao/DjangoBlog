@@ -1,0 +1,66 @@
+{% extends 'base_main.html' %}
+{% load static %}
+
+{% block extCss %}
+    {{ block.super }}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/users/for_base_personal_center.css' %}"/>
+
+    {#fileinput插件#}
+    {#    <link href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/css/fileinput.min.css" rel="stylesheet">#}
+{% endblock %}
+
+{% block extJs %}
+    {{ block.super }}
+    <script src="{% static 'js/users/for_personal_center.js' %}"></script>
+    {# ajaxSubmit插件 #}
+
+    <script src="{% static 'js/users/jquery.form.min.js' %}"></script>
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>#}
+    {#fileinput插件#}
+    {#    <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/js/fileinput.min.js"></script>#}
+    {#    <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/js/locales/zh.min.js"></script>#}
+{% endblock %}
+
+{% block content_detail %}
+
+    <div class="row" id="all_personal_center">
+        <div class="col-md-9 col-xs-9">
+            <div id="personal_center_content">
+                欢迎你{{ uid }}
+            </div>
+        </div>
+        <div class="col-md-3 col-xs-3" id="right_part">
+            <div class="list-group">
+                <div id="personal_img">
+                    {# 如果有imgUrl #}
+                    {% if imgUrl %}
+                        <img src="{{ imgUrl }}" alt="头像" class="img-circle"><br>
+                        {% else %}
+                        <img src="{% static 'img/favicon.ico' %}" alt="头像" class="img-circle"><br>
+                    {% endif %}
+                    <p>{{ uid }}</p>
+                </div>
+                <a href="#" class="list-group-item active" id="change_img">
+                    <p>修改头像</p>
+                </a>
+                <a href="#" class="list-group-item" id="change_profile">
+                    <p>个人资料</p>
+                </a>
+                <a href="#" class="list-group-item" id="change_password">
+                    <p>修改密码</p>
+                </a>
+                <a href="#" class="list-group-item" id="my_comment">
+                    <p>我的评论</p>
+                </a>
+                <a href="#" class="list-group-item" id="my_message">
+                    <span class="badge">14</span>
+                    <p>我的消息</p>
+                </a>
+                <a href="#" class="list-group-item" id="exit_system">
+                    <p>退出登录</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

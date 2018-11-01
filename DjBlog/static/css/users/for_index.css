@@ -1,0 +1,115 @@
+.list-group a {
+    height: 40px;
+    font-size: 10px;
+}
+
+#lunbotu, #biaoqianyun {
+    border-radius: 15px;
+}
+
+article[class=blog-post] {
+    border-radius: 15px;
+    margin: 20px auto 5px;
+    padding: 10px;
+    background-color: white;
+    box-shadow: #cb4b16 0 0 5px;
+    width: 99%;
+
+}
+
+.post-title {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.post-title a {
+    font-size: 30px;
+}
+
+.post-meta {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 12px;
+    color: #9d9d9d;
+}
+
+.post-meta a {
+    color: orangered;
+}
+
+.post-content {
+    margin-top: 30px;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: 16px;
+}
+
+.btn-default {
+    border: 1px solid #e67e22;
+    background: #e67e22;
+    color: #ffffff;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    outline: none;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+.btn-default:hover{
+    background-color: #0f0f0f;
+    color: white;
+}
+.post-permalink{
+    margin-left: 25px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+.post-footer{
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #9d9d9d;
+}
+.search {
+    padding: 8px;
+    border-radius: 4px;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+}
+.search input{
+    display: inline;
+}
+.search button{
+    display: inline;
+}
+
+/*天气预报*/
+#weather{
+    width: 80%;
+    height: 30px;
+
+}
+#weather-div{
+    width: 100% ;
+    text-align: center;
+    vertical-align: center;
+    border-radius: 5px;
+    background-color: white;
+    margin-top: 30px;
+    padding-top:10px;
+    box-shadow: #cb4b16 0 0 5px;
+}
+
+#biaoqianyun{
+    margin-top: 20px;
+}

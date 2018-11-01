@@ -1,0 +1,128 @@
+<form id="do_change_email" style="padding: 3rem">
+    {% csrf_token %}
+    <div class="alert alert-danger" role="alert" id="warning_alert" style="display: none">...</div>
+
+    <div class="form-group">
+        <label class="control-label" for="user_email">邮箱号:</label>
+        <input type="text" class="form-control " name="user_email" id="user_email"
+               aria-describedby="helpBlock2"
+               pattern="^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$">
+        <input type="button" class="btn btn-default" id="do_send_verification_code" value="发送验证码">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="verification_code">验证码:</label>
+        <input type="text" class="form-control" name="verification_code" id="verification_code"
+               aria-describedby="helpBlock2">
+    </div>
+    <input disabled="disabled" type="button" id="do_submit" value="提交" class="btn btn-success" style="width: 100px;">
+    <a href="{% url 'users:go_personal_center' %}" class="btn btn-info" style="width: 100px;">返回</a>
+</form>
+
+
+<script>
+    $(function () {
+        {# 点击邮箱验证码 #}
+        $("#do_send_verification_code").click(function () {
+            let your_email_address = $("#user_email").val();
+            console.log(your_email_address);
+
+            $.ajax({
+                url: '{% url 'users:do_send_email_verification_code' %}',
+                type: 'post',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    your_email_address: your_email_address
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data['code'] == 200) {
+                        console.log(data['code']);
+                        $("#do_send_verification_code").prop('disabled', true);
+                        $("#do_send_verification_code").prop('value', '60秒后重新发送');
+                        var start = 60;
+
+                        function countdown() {
+                            start--;
+                            $("#do_send_verification_code").prop('value', start + '秒后重新发送');
+                        }
+
+                        function stopcount() {
+                            $("#do_send_verification_code").prop('value', '发送验证码');
+                            $("#do_send_verification_code").prop('disabled', false);
+                            window.clearInterval(t1);
+                            window.clearTimeout(t2);
+                        }
+
+                        var t1 = window.setInterval(countdown, 1000);
+                        var t2 = window.setTimeout(stopcount, 60000);
+
+                    } else {
+                        alert("抱歉，发送邮件失败,请检查邮箱号是否正确");
+                    }
+
+                },
+                error: function (xhr, status, err) {
+                    alert("抱歉，服务器出了点小问题TAT,快联系作者上报bug吧TAT");
+                    console.log(xhr.responseText);
+                    console.log(status);
+                    console.log(err);
+                }
+            });
+        });
+
+        {#点击提交按钮提交表单#}
+        $('#do_submit').click(function () {
+            $('#do_change_email').ajaxSubmit({
+                url: '/users/do_change_email/',
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+                    if (data['code'] == 200) {
+                        alert('邮箱修改成功')
+                        window.open('/users/go_personal_center', target = '_self')
+                    } else {
+
+                        console.log(data['code']);
+                        alert('修改错误，' + data['message'])
+                    }
+                },
+                error: function (xhr, status, err) {
+                    alert("抱歉，服务器出了点小问题TAT,快联系作者上报bug吧TAT");
+                    console.log(xhr.responseText);
+                    console.log(status);
+                    console.log(err);
+                },
+
+                clearForm: false,//禁止清除表单
+                resetForm: false //禁止重置表单
+            });
+            // 这里返回false防止页面刷新
+            return false;
+        });
+
+        {#输入框失去焦点时检查是不是为空#}
+        $('input').change(function () {
+            {#如果两个框都有值#}
+            if ($('#user_email').val() && $("#verification_code").val()) {
+                $('#do_submit').removeAttr('disabled')
+            }
+            else {
+                $('#do_submit').prop('disabled', true)
+            }
+
+            {#如果邮箱不符合规范#}
+            if (!/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test($('#user_email').val())) {
+                console.log('ggg')
+                $('#user_email').parent('.form-group').addClass('has-error');
+                $('#warning_alert').text('*请输入合法的邮箱地址如123@sina.com');
+                $('#warning_alert').css('display', 'block');
+                $('#do_submit').removeAttr('disabled')
+            }
+            else {
+                $('#user_email').parent('.form-group').removeClass('has-error');
+                $('#warning_alert').css('display', 'none');
+            }
+        })
+
+    })
+</script>

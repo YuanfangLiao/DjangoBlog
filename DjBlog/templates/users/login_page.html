@@ -1,0 +1,47 @@
+{% extends 'users/base_login_register_page.html' %}
+{% load static %}
+
+{% block extJs %}
+    {{ block.super }}
+    {# ajaxSubmit插件 #}
+    <script src="{% static 'js/users/jquery.form.min.js' %}"></script>
+    {# 外置js #}
+    <script src="{% static 'js/users/for_login_page.js' %}"></script>
+{% endblock %}
+
+
+{% block content_detail %}
+    <form id="login_form" action="/users/do_login/" method="post" style="width: 95%;margin: 0 auto;background-color:
+    white;padding: 50px;border-radius: 10px; box-shadow: 0 0 3px #000;">
+        {% csrf_token %}
+        <h5 style="font-size: 32px;margin:0 auto;text-align: center">DjBlog用户登陆</h5>
+        <br/>
+        <div class="alert alert-danger" role="alert" id="warning_alert" style="display: none">...</div>
+        <div class="form-group">
+            <label class="control-label" for="user_id">*用户名:</label>
+            {# 如果uid不为None，就显示 #}
+            <input type="text" class="form-control" name="user_id" id="user_id"
+                   required="required" aria-describedby="helpBlock2" value="{% if uid  %}{{ uid }}{% endif %}">
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="user_passwd">*密码:</label>
+            <input type="password" class="form-control" name="user_passwd" id="user_passwd"
+                   aria-describedby="helpBlock2">
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="your_verificaiton_code">*验证码:</label>
+            <input type="text" class="form-control" name="your_verificaiton_code" id="your_verificaiton_code"
+                   aria-describedby="helpBlock2"><br/>
+            <img src="{% url 'users:get_verification_code' %}" id="verificationCode"
+                 alt="验证码" width="200px" height="70px" style="border-radius: 10px"/><span style="font-size: 12px;
+                 position: relative;top: 20px;">&nbsp;&nbsp;单击图片刷新验证码<span class="glyphicon glyphicon-repeat"
+                                                                           aria-hidden="true"></span></span>
+        </div>
+
+
+        <input type="submit" id="do_submit" value="登陆" class="btn btn-info" style="width: 200px;height: 50px">
+
+    </form>
+{% endblock %}

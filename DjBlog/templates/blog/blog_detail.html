@@ -1,0 +1,29 @@
+{% extends 'base_main.html' %}
+{% load static %}
+
+{% block content_detail %}
+    {{ block.super }}
+
+    <div id="inthecontent">
+        <div class="markdown-body" style="padding: 20px;">
+            {{ post.body|safe }}
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block extCss %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'plugins/editor-1.md-master/css/editormd.css' %}"/>
+    <style type="text/css">
+        #inthecontent {
+            width: 100%;
+            background-color: white;
+        }
+    </style>
+{% endblock %}
+{% block extJs %}
+    {{ block.super }}
+    <script src="{% static 'plugins/editor-1.md-master/editormd.js' %}"></script>
+{% endblock %}

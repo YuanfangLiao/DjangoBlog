@@ -1,0 +1,48 @@
+<form style="padding: 3rem">
+    {% csrf_token %}
+    <div class="form-group">
+        <label class="control-label" for="user_phone">手机号:</label>
+        <input type="text" class="form-control" name="user_phone" id="user_phone"
+               aria-describedby="helpBlock2">
+        <input type="button" class="btn btn-default" id="do_send_verification_code" value="发送验证码">
+    </div>
+
+    <div class="form-group">
+        <label class="control-label" for="user_email">验证码:</label>
+        <input type="text" class="form-control" name="user_email" id="user_email"
+               aria-describedby="helpBlock2">
+    </div>
+    <input disabled="disabled" type="button" id="do_submit" value="提交" class="btn btn-success" style="width: 100px;">
+    <a href="{% url 'users:go_personal_center' %}" class="btn btn-info" style="width: 100px;">返回</a>
+</form>
+
+
+<script>
+    $(function () {
+        {# 点击邮箱验证码 #}
+        $("#do_send_verification_code").click(function () {
+            let your_email_address = $("#user_email").val();
+            console.log(your_email_address);
+
+            $.ajax({
+                url: '{% url 'users:do_send_email_verification_code' %}',
+                type: 'post',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    your_email_address: your_email_address
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data['code'])
+                },
+                error: function (xhr, status, err) {
+                    alert("抱歉，服务器出了点小问题TAT,快联系作者上报bug吧TAT");
+                    console.log(xhr.responseText);
+                    console.log(status);
+                    console.log(err);
+                }
+            });
+
+        })
+    })
+</script>
