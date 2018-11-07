@@ -24,7 +24,7 @@ SECRET_KEY = '2wkpsk_@xes&+vz#ww_^f+2&la78*72%41h!^o9y)4d7cgbeza'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', ]
+ALLOWED_HOSTS = ['127.0.0.1', 'www.liaoyuanfang.xyz',]
 
 # Application definition
 
@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'blog',
     'users',
 ]
@@ -147,10 +146,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/upload')
 # MEDIA_URL = '/static/'
 
 STATICFILES_FINDERS = (
-  'django.contrib.staticfiles.finders.FileSystemFinder',
-  'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-
 
 # 邮箱设置
 EMAIL_USE_SSL = True

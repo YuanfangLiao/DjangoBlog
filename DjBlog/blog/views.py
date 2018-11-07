@@ -3,6 +3,7 @@ import random
 
 import markdown
 from PIL import Image
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404
@@ -29,16 +30,32 @@ def index(request):
 
     # 博客分类信息，按个数排名 文章信息，导航栏信息
     carouses = CarouselModel.objects.all().order_by('total_number')
-    blogs = BlogPostModel.objects.all()
+    all_blogs = BlogPostModel.objects.all().order_by('-create_time')
     navs = Nav.objects.all()
+    paginator = Paginator(all_blogs, 5)
+    page = request.GET.get('page')
+    try:
+        blogs = paginator.page(page)
+        now_page = page
+    except PageNotAnInteger:
+        blogs = paginator.page(1)
+        now_page = 1
+    except EmptyPage:
+        blogs = paginator.page(paginator.num_pages)
+        now_page = paginator.num_pages
 
     data['carouses'] = carouses
     data['blogs'] = blogs
     data['navs'] = navs
+    data['now_page'] = now_page
+    data['num_pages'] = paginator.num_pages
 
     response = render(request, 'index.html', data)
     return response
 
+
+def changetx(request):
+    ...
 
 def blog_detail(request, blog_id):
     if request.method == 'GET':

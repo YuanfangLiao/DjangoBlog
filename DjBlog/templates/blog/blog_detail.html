@@ -5,6 +5,13 @@
     {{ block.super }}
 
     <div id="inthecontent">
+    <br/>
+        <div class="page-header" style="font-size: 45px">
+            <h1>&nbsp;&nbsp;&nbsp;&nbsp;{{ post.title }}
+                <small>{{ post.en_title }}</small>
+            </h1>
+        </div>
+
         <div class="markdown-body" style="padding: 20px;">
             {{ post.body|safe }}
         </div>

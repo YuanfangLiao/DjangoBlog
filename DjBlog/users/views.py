@@ -1,5 +1,8 @@
+import base64
 import hashlib
 import io
+import logging
+import os
 import random
 import re
 
@@ -11,10 +14,13 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
 
+from DjBlog import settings
 from blog.models import Nav
 from users.functions import check_logined, get_uid
 from users.models import UserModel
 from users.sendEmail import EmailSender
+
+logger = logging.getLogger(__name__)
 
 
 # 去注册界面
@@ -236,14 +242,53 @@ def go_user_center_somewhere(request, somewhere1, somewhere2=''):
 # 进行修改头像操作
 def do_change_img(request):
     user = get_User_Model(request)
-    img = request.FILES.get('img')
-    # image = Image.open(img)
-    # image.thumbnail((300, 300),Image.ANTIALIAS)
-    # image.save(MEDIA_ROOT)
-    user.user_img = img
-    user.save()
+    # img = request.FILES.get('img')
+    # # image = Image.open(img)
+    # # image.thumbnail((300, 300),Image.ANTIALIAS)
+    # # image.save(MEDIA_ROOT)
+    # user.user_img = img
+    # user.save()
 
-    return HttpResponse('保存成功')
+    # 本地保存头像
+    data = request.POST['tx']
+    if not data:
+        logger.error(
+            u'[UserControl]用户上传头像为空:[%s]'.format(
+                request.user.username
+            )
+        )
+        return HttpResponse(u"上传头像错误", status=500)
+
+    imgData = base64.b64decode(data)
+    # user = UserModel()
+    filename = "tx_100x100_{}.png".format(user.user_id)
+    static_root = getattr(settings, 'STATIC_ROOT', None)
+    filedir = os.path.join(static_root, 'upload/users')
+    # if static_root:
+    #     filedir = os.path.join(static_root, '/upload/users')
+    # if not os.path.exists(filedir):
+    #     os.makedirs(filedir)
+    print(filedir)
+    path = os.path.join(filedir, filename)
+
+    file = open(path, "wb+")
+    file.write(imgData)
+    file.flush()
+    file.close()
+
+    # 修改头像分辨率
+    im = Image.open(path)
+    out = im.resize((100, 100), Image.ANTIALIAS)
+    # out.convert('RGB')
+    try:
+        out.save(path)
+        # user = UserModel()
+        user.user_img = 'users/'+filename
+        user.save()
+    except Exception as e:
+        print(e)
+
+    return HttpResponse(u"上传头像成功!\n(注意有10分钟缓存)")
 
 
 # 进行修改性别操作

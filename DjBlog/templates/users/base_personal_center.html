@@ -4,6 +4,7 @@
 {% block extCss %}
     {{ block.super }}
     <link type="text/css" rel="stylesheet" href="{% static 'css/users/for_base_personal_center.css' %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static 'js/users/jquery.Jcrop.min.css' %}"/>
 
     {#fileinput插件#}
     {#    <link href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/css/fileinput.min.css" rel="stylesheet">#}
@@ -15,6 +16,8 @@
     {# ajaxSubmit插件 #}
 
     <script src="{% static 'js/users/jquery.form.min.js' %}"></script>
+    <script src="{% static 'js/users/jquery.Jcrop.min.js' %}"></script>
+    <script src="{% static 'js/users/jquery.cookie.js' %}"></script>
     {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>#}
     {#fileinput插件#}
     {#    <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/js/fileinput.min.js"></script>#}
@@ -22,20 +25,14 @@
 {% endblock %}
 
 {% block content_detail %}
-
     <div class="row" id="all_personal_center">
-        <div class="col-md-9 col-xs-9">
-            <div id="personal_center_content">
-                欢迎你{{ uid }}
-            </div>
-        </div>
-        <div class="col-md-3 col-xs-3" id="right_part">
+        <div class="col-md-3 main-content" id="right_part">
             <div class="list-group">
                 <div id="personal_img">
                     {# 如果有imgUrl #}
                     {% if imgUrl %}
                         <img src="{{ imgUrl }}" alt="头像" class="img-circle"><br>
-                        {% else %}
+                    {% else %}
                         <img src="{% static 'img/favicon.ico' %}" alt="头像" class="img-circle"><br>
                     {% endif %}
                     <p>{{ uid }}</p>
@@ -59,6 +56,11 @@
                 <a href="#" class="list-group-item" id="exit_system">
                     <p>退出登录</p>
                 </a>
+            </div>
+        </div>
+        <div class="col-md-9 sidebar">
+            <div id="personal_center_content">
+                欢迎你{{ uid }}
             </div>
         </div>
     </div>
