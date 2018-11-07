@@ -1,0 +1,184 @@
+*** Starting uWSGI 2.0.17.1 (64bit) on [Thu Nov  1 17:18:58 2018] ***
+compiled with version: 4.2.1 Compatible Apple LLVM 10.0.0 (clang-1000.10.44.4) on 01 November 2018 08:15:35
+os: Darwin-18.2.0 Darwin Kernel Version 18.2.0: Fri Oct  5 19:41:49 PDT 2018; root:xnu-4903.221.2~2/RELEASE_X86_64
+nodename: localhost
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 4
+current working directory: /Users/liao/PycharmProjects/DjBlog
+writing pidfile to uwsgi.pid
+detected binary path: /Users/liao/.virtualenvs/django2_py37/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /Users/liao/PycharmProjects/DjBlog
+your processes number limit is 709
+your memory page size is 4096 bytes
+detected max file descriptor number: 10240
+lock engine: OSX spinlocks
+thunder lock: disabled (you can enable it with --thunder-lock)
+uWSGI http bound on 127.0.0.1:8010 fd 4
+uwsgi socket 0 bound to TCP address 127.0.0.1:57093 (port auto-assigned) fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.0 (default, Sep 18 2018, 18:47:08)  [Clang 10.0.0 (clang-1000.10.43.1)]
+Python main interpreter initialized at 0x7fabd1d078c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 416560 bytes (406 KB) for 8 cores
+*** Operational MODE: preforking+threaded ***
+Traceback (most recent call last):
+  File "DjBlog/wsgi.py", line 12, in <module>
+    from django.core.wsgi import get_wsgi_application
+ModuleNotFoundError: No module named 'django'
+unable to load app 0 (mountpoint='') (callable not found or import error)
+*** no app loaded. going in full dynamic mode ***
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 4429)
+spawned uWSGI worker 1 (pid: 4430, cores: 2)
+spawned uWSGI worker 2 (pid: 4431, cores: 2)
+spawned uWSGI worker 3 (pid: 4432, cores: 2)
+spawned uWSGI worker 4 (pid: 4433, cores: 2)
+spawned uWSGI http 1 (pid: 4434)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/1] 127.0.0.1 () {42 vars in 814 bytes} [Thu Nov  1 17:20:52 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4432|app: -1|req: -1/2] 127.0.0.1 () {42 vars in 791 bytes} [Thu Nov  1 17:20:52 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4432|app: -1|req: -1/3] 127.0.0.1 () {42 vars in 814 bytes} [Thu Nov  1 17:21:29 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/4] 127.0.0.1 () {42 vars in 791 bytes} [Thu Nov  1 17:21:30 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4431|app: -1|req: -1/5] 127.0.0.1 () {42 vars in 814 bytes} [Thu Nov  1 17:21:31 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/6] 127.0.0.1 () {42 vars in 791 bytes} [Thu Nov  1 17:21:31 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (1 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/7] 127.0.0.1 () {42 vars in 814 bytes} [Thu Nov  1 17:21:47 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4432|app: -1|req: -1/8] 127.0.0.1 () {42 vars in 791 bytes} [Thu Nov  1 17:21:48 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4431|app: -1|req: -1/9] 127.0.0.1 () {42 vars in 813 bytes} [Thu Nov  1 17:21:59 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4432|app: -1|req: -1/10] 127.0.0.1 () {42 vars in 790 bytes} [Thu Nov  1 17:21:59 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/11] 127.0.0.1 () {42 vars in 813 bytes} [Thu Nov  1 17:21:59 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/12] 127.0.0.1 () {42 vars in 790 bytes} [Thu Nov  1 17:21:59 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/13] 127.0.0.1 () {42 vars in 813 bytes} [Thu Nov  1 17:22:00 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/14] 127.0.0.1 () {42 vars in 790 bytes} [Thu Nov  1 17:22:00 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/15] 127.0.0.1 () {38 vars in 760 bytes} [Thu Nov  1 18:14:42 2018] GET / => generated 21 bytes in 1 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/16] 127.0.0.1 () {38 vars in 737 bytes} [Thu Nov  1 18:14:42 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4432|app: -1|req: -1/17] 127.0.0.1 () {40 vars in 791 bytes} [Thu Nov  1 18:14:44 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/18] 127.0.0.1 () {38 vars in 737 bytes} [Thu Nov  1 18:14:44 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/19] 127.0.0.1 () {40 vars in 791 bytes} [Thu Nov  1 18:14:45 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/20] 127.0.0.1 () {38 vars in 737 bytes} [Thu Nov  1 18:14:45 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/21] 127.0.0.1 () {40 vars in 791 bytes} [Thu Nov  1 18:14:46 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4432|app: -1|req: -1/22] 127.0.0.1 () {38 vars in 737 bytes} [Thu Nov  1 18:14:46 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+*** Starting uWSGI 2.0.17.1 (64bit) on [Thu Nov  1 18:15:19 2018] ***
+compiled with version: 4.2.1 Compatible Apple LLVM 10.0.0 (clang-1000.10.44.4) on 01 November 2018 08:15:35
+os: Darwin-18.2.0 Darwin Kernel Version 18.2.0: Fri Oct  5 19:41:49 PDT 2018; root:xnu-4903.221.2~2/RELEASE_X86_64
+nodename: localhost
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 4
+current working directory: /Users/liao/PycharmProjects/DjBlog
+writing pidfile to uwsgi.pid
+detected binary path: /Users/liao/.virtualenvs/django2_py37/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /Users/liao/PycharmProjects/DjBlog
+your processes number limit is 709
+your memory page size is 4096 bytes
+detected max file descriptor number: 10240
+lock engine: OSX spinlocks
+thunder lock: disabled (you can enable it with --thunder-lock)
+probably another instance of uWSGI is running on the same address (127.0.0.1:8010).
+bind(): Address already in use [core/socket.c line 769]
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/23] 127.0.0.1 () {40 vars in 791 bytes} [Thu Nov  1 18:15:22 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (1 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/24] 127.0.0.1 () {38 vars in 737 bytes} [Thu Nov  1 18:15:22 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/25] 127.0.0.1 () {40 vars in 791 bytes} [Thu Nov  1 18:15:23 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/26] 127.0.0.1 () {38 vars in 737 bytes} [Thu Nov  1 18:15:23 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/27] 127.0.0.1 () {40 vars in 792 bytes} [Thu Nov  1 18:15:25 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/28] 127.0.0.1 () {38 vars in 738 bytes} [Thu Nov  1 18:15:25 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 0)
+--- no python application found, check your startup logs for errors ---
+[pid: 4430|app: -1|req: -1/29] 127.0.0.1 () {40 vars in 792 bytes} [Thu Nov  1 18:15:32 2018] GET / => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+--- no python application found, check your startup logs for errors ---
+[pid: 4432|app: -1|req: -1/30] 127.0.0.1 () {38 vars in 738 bytes} [Thu Nov  1 18:15:32 2018] GET /favicon.ico => generated 21 bytes in 0 msecs (HTTP/1.1 500) 2 headers in 83 bytes (0 switches on core 1)
+gateway "uWSGI http 1" has been buried (pid: 4434)
+...brutally killing workers...
+worker 4 buried after 1 seconds
+worker 3 buried after 1 seconds
+worker 2 buried after 1 seconds
+worker 1 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /Users/liao/PycharmProjects/DjBlog
+closing all non-uwsgi socket fds > 2 (max_fd = 10240)...
+found fd 3 mapped to socket 0 (127.0.0.1:57093)
+running /Users/liao/.virtualenvs/django2_py37/bin/uwsgi
+[uWSGI] getting INI configuration from uwsgi.ini
+*** Starting uWSGI 2.0.17.1 (64bit) on [Thu Nov  1 21:32:57 2018] ***
+compiled with version: 4.2.1 Compatible Apple LLVM 10.0.0 (clang-1000.10.44.4) on 01 November 2018 08:15:35
+os: Darwin-18.2.0 Darwin Kernel Version 18.2.0: Fri Oct  5 19:41:49 PDT 2018; root:xnu-4903.221.2~2/RELEASE_X86_64
+nodename: localhost
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 4
+current working directory: /Users/liao/PycharmProjects/DjBlog
+detected binary path: /Users/liao/.virtualenvs/django2_py37/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /Users/liao/PycharmProjects/DjBlog
+your processes number limit is 709
+your memory page size is 4096 bytes
+detected max file descriptor number: 10240
+lock engine: OSX spinlocks
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address 127.0.0.1:8010 fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.7.0 (default, Sep 18 2018, 18:47:08)  [Clang 10.0.0 (clang-1000.10.43.1)]
+Python main interpreter initialized at 0x7fc4bf40a140
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 416560 bytes (406 KB) for 8 cores
+*** Operational MODE: preforking+threaded ***
+Traceback (most recent call last):
+  File "DjBlog/wsgi.py", line 12, in <module>
+    from django.core.wsgi import get_wsgi_application
+ModuleNotFoundError: No module named 'django'
+unable to load app 0 (mountpoint='') (callable not found or import error)
+*** no app loaded. going in full dynamic mode ***
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 4429)
+spawned uWSGI worker 1 (pid: 6149, cores: 2)
+spawned uWSGI worker 2 (pid: 6150, cores: 2)
+spawned uWSGI worker 3 (pid: 6151, cores: 2)
+spawned uWSGI worker 4 (pid: 6152, cores: 2)

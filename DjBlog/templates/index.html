@@ -4,22 +4,24 @@
 {% block content_detail %}
 
     <div class="row">
-        {# 轮播图 #}
-        <div class="swiper-container" id="lunbotu">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><a href="#"><img src="{% static 'img/1.jpg' %}" width="100%"></a></div>
-                <div class="swiper-slide"><a href="#"><img src="{% static 'img/2.jpg' %}" width="100%"></a></div>
-                <div class="swiper-slide"><a href="#"><img src="{% static 'img/3.jpg' %}" width="100%"></a></div>
-                <div class="swiper-slide"><a href="#"><img src="{% static 'img/4.jpg' %}" width="100%"></a></div>
-            </div>
-            <!-- 如果需要分页器 -->
-            <div class="swiper-pagination"></div>
 
-            <!-- 如果需要导航按钮 -->
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-        </div>
         <main class="col-md-8 main-content">
+            {# 轮播图 #}
+            <br/>
+            <div class="swiper-container" id="lunbotu">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><a href="#"><img src="{% static 'img/1.jpg' %}" width="100%"></a></div>
+                    <div class="swiper-slide"><a href="#"><img src="{% static 'img/2.jpg' %}" width="100%"></a></div>
+                    <div class="swiper-slide"><a href="#"><img src="{% static 'img/3.jpg' %}" width="100%"></a></div>
+                    <div class="swiper-slide"><a href="#"><img src="{% static 'img/4.jpg' %}" width="100%"></a></div>
+                </div>
+                <!-- 如果需要分页器 -->
+                <div class="swiper-pagination"></div>
+
+                <!-- 如果需要导航按钮 -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
 
             {% for blog in blogs %}
                 <article id="{{ blog.id }}" class="blog-post">
@@ -47,16 +49,42 @@
                     </div>
                 </article>
             {% endfor %}
-
+            <div id="daohanglan">
+                <nav aria-label="...">
+                    <ul class="pager">
+                        {% if blogs.has_previous %}
+                            <li class="previous"><a href="?page={{ blogs.previous_page_number }}"><span
+                                    aria-hidden="true">&larr;</span> Newer</a></li>
+                        {% else %}
+                            <li class="previous disabled"><a><span aria-hidden="true">&larr;</span> Newer</a></li>
+                        {% endif %}
+                        {#  <li>{{ now_page }}/{{ num_pages }}</li>#}
+                        {% for pg in blogs.paginator.page_range %}
+                            <li class="active"><a href="?page={{ pg }}">{{ pg }} <span class="sr-only">(current)</span></a>
+                            </li>
+                        {% endfor %}
+                        {% if blogs.has_next %}
+                            <li class="next"><a href="?page={{ blogs.next_page_number }}">Older <span
+                                    aria-hidden="true">&rarr;</span></a>
+                            </li>
+                        {% else %}
+                            <li class="next disabled"><a>Older <span aria-hidden="true">&rarr;</span></a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
 
         </main>
 
         <aside class="col-md-4 sidebar">
 
             <div id="weather-div">
+                <br/>
                 <h1>天气预报</h1>
-                <iframe id="weather" width="100%" scrolling="no" height="30" frameborder="0" allowtransparency="true"
-                        src="//i.tianqi.com/index.php?c=code&id=10&color=%23&bgc=%23FFFFFF&bdc=%23&icon=1&py=hangzhou&site=13"></iframe>
+                <br/>
+                 <iframe width="350" scrolling="no" height="100" frameborder="0" allowtransparency="true"
+                        src="//i.tianqi.com/index.php?c=code&id=2&bgc=%23&bdc=%23&icon=2&num=2&site=14"></iframe>
             </div>
             <div class="search">
                 <form class="form-inline" role="form" method="get" action="/blog/search/">
@@ -117,4 +145,8 @@
     {{ block.super }}
     {# indexCss #}
     <link type="text/css" rel="stylesheet" href="{% static 'css/users/for_index.css' %}"/>
+{% endblock %}
+{% block extJs %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
 {% endblock %}

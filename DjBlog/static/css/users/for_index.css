@@ -113,3 +113,12 @@ article[class=blog-post] {
 #biaoqianyun{
     margin-top: 20px;
 }
+#daohanglan{
+    width: 100%;
+    text-align: center;
+}
+
+.swiper-container{
+    width: 100%;
+    height: 600px;
+}
