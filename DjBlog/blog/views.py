@@ -31,6 +31,9 @@ def index(request):
     # 博客分类信息，按个数排名 文章信息，导航栏信息
     carouses = CarouselModel.objects.all().order_by('total_number')
     all_blogs = BlogPostModel.objects.all().order_by('-create_time')
+    tags = []
+    for blog in all_blogs:
+        tags += blog.get_tags()
     navs = Nav.objects.all()
     paginator = Paginator(all_blogs, 5)
     page = request.GET.get('page')
@@ -44,9 +47,11 @@ def index(request):
         blogs = paginator.page(paginator.num_pages)
         now_page = paginator.num_pages
 
+    print(tags)
     data['carouses'] = carouses
     data['blogs'] = blogs
     data['navs'] = navs
+    data['tags'] = tags
     data['now_page'] = now_page
     data['num_pages'] = paginator.num_pages
 
@@ -56,6 +61,7 @@ def index(request):
 
 def changetx(request):
     ...
+
 
 def blog_detail(request, blog_id):
     if request.method == 'GET':

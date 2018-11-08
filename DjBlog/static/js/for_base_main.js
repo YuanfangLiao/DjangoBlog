@@ -7,4 +7,6 @@ $(function () {
     if(window_width<800){
         $('#content').css('width','90%')
     }
+	$("#loading").delay(500).fadeOut(500);
+	//$("#loading").fadeOut(500);
 });

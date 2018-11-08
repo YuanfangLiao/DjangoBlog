@@ -15,7 +15,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from DjBlog import settings
-from blog.models import Nav
+from blog.models import Nav, BlogPostModel
 from users.functions import check_logined, get_uid
 from users.models import UserModel
 from users.sendEmail import EmailSender
@@ -239,6 +239,16 @@ def go_user_center_somewhere(request, somewhere1, somewhere2=''):
     return render(request, 'users/' + somewhere1 + '/' + somewhere2, context=data)
 
 
+def manage_article(request):
+    if request.method == "GET":
+        user = get_User_Model(request)
+        blogs = BlogPostModel.objects.filter(author=user)
+        data = {"user": user,
+                'blogs': blogs
+                }
+        return render(request, 'users/manage_article.html', context=data)
+
+
 # 进行修改头像操作
 def do_change_img(request):
     user = get_User_Model(request)
@@ -283,7 +293,7 @@ def do_change_img(request):
     try:
         out.save(path)
         # user = UserModel()
-        user.user_img = 'users/'+filename
+        user.user_img = 'users/' + filename
         user.save()
     except Exception as e:
         print(e)
@@ -401,3 +411,8 @@ def do_send_email_verification_code(request):
     except Exception as ex:
         print('error' + str(ex))
         return JsonResponse({'code': '501', 'msg': '发送邮件错误'})
+
+
+# 404页面
+def page_not_found(request):
+    return HttpResponse("40404040404")

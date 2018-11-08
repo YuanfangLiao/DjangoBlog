@@ -1,0 +1,31 @@
+<div style="padding: 20px 30px">
+    <hr/>
+    {% for blog in blogs %}
+        <div style="float: right;font-size: 12px;margin-top: 10px;margin-right: 30px">
+            <a href="#">修改博客</a>&nbsp;|
+            <a href="#">删除</a>&nbsp;|
+            <a href="#">管理评论</a>
+        </div>
+
+        <div class="article-list-item" style="font-size: 10px;color: #9d9d9d">
+            <h1 style="font-size:23px;color: #0f0f0f">{{ blog.title }}</h1>
+            <br/>
+            <time class="post-date" datetime="2018年5月17日星期四凌晨3点41分" title="2018年5月17日星期四凌晨3点41分"
+                  style="display: inline">
+                <span class="glyphicon glyphicon-calendar"></span> {{ blog.create_time|date:"Y-m-d" }}
+            </time>&nbsp;&nbsp;&nbsp;
+            <p style="display: inline"><span class="glyphicon glyphicon-comment" aria-hidden="true">
+            </span>&nbsp;{{ blog.view_times }}</p>
+            <hr/>
+        </div>
+    {% endfor %}
+
+</div>
+
+<script>
+    $(function () {
+        {# 载入成功后把active改为本页面 #}
+        $(".list-group-item").removeClass('active');
+        $('#manage_article').addClass('active');
+    })
+</script>
