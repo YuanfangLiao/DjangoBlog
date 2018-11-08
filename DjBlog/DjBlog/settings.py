@@ -24,7 +24,7 @@ SECRET_KEY = '2wkpsk_@xes&+vz#ww_^f+2&la78*72%41h!^o9y)4d7cgbeza'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'www.liaoyuanfang.xyz',]
+ALLOWED_HOSTS = ['*',]
 
 # Application definition
 
@@ -79,9 +79,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'DjBlog',
-        'USER': 'root',
+        'USER': 'gople',
         'PASSWORD': '12345678',
-        'HOST': 'localhost',
+        'HOST': '47.101.39.17',
         'PORT': 3306,
     }
 }

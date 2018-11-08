@@ -19,6 +19,14 @@ $(function () {
         $('#personal_center_content').load('/users/go_user_center_somewhere/my_message.html/')
     });
 
+    $('#manage_article').click(function () {
+        $('#personal_center_content').load('/users/manage_article')
+    });
+
+    $('#apply_admin').click(function () {
+        $('#personal_center_content').load('/users/go_user_center_somewhere/apply_admin.html/')
+    });
+
     $('#exit_system').click(function () {
         $(location).prop('href', '/users/do_log_out');
     });

@@ -12,6 +12,7 @@ urlpatterns = [
     path('check_user_exist/', views.check_user_exist, name='check_user_exist'),
     path('check_email_exist/', views.check_email_exist, name='check_email_exist'),
     path('go_personal_center/', views.go_personal_center, name='go_personal_center'),
+    path('manage_article/', views.manage_article, name='manage_blog'),
 
     # 正则匹配
     re_path(r'^get_verification_code/', views.get_verification_code, name='get_verification_code'),
