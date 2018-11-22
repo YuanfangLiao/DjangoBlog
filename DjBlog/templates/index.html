@@ -7,75 +7,100 @@
     <div class="row">
 
         <main class="col-md-8 main-content">
-            {# 轮播图 #}
-            <br/>
-            <div class="swiper-container" id="lunbotu">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide"><a href="#"><img src="{% static 'img/1.jpg' %}" width="100%"></a></div>
-                    <div class="swiper-slide"><a href="#"><img src="{% static 'img/2.jpg' %}" width="100%"></a></div>
-                    <div class="swiper-slide"><a href="#"><img src="{% static 'img/3.jpg' %}" width="100%"></a></div>
-{#                    <div class="swiper-slide"><a href="#"><img src="{% static 'img/4.jpg' %}" width="100%"></a></div>#}
-                </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
-
-                <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-            </div>
-            <br/>
-            {% for blog in blogs %}
-                <article id="{{ blog.id }}" class="blog-post">
-                    <div class="post-head">
-                        <h1 class="post-title"><a href="{% url 'blog:blog_detail' blog.id %}">{{ blog.title }}</a></h1>
-                        <div class="post-meta">
-                            <span class="author">作者：<a href="#">{{ blog.author_id }}</a></span> •
-                            <time class="post-date" datetime="2018年5月17日星期四凌晨3点41分" title="2018年5月17日星期四凌晨3点41分">
-                                <span class="glyphicon glyphicon-calendar"></span> {{ blog.create_time|date:"Y-m-d" }}
-                            </time>
-                            •
-                            <span class="carousel">分类：<a href="#">{{ blog.carousel_id }}</a></span>
-                        </div>
-                    </div>
-                    <div class="post-content">
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ blog.summary }} ......</p>
-                    </div>
-                    <div class="post-permalink">
-                        <a href="{% url 'blog:blog_detail' blog.id %}" class="btn btn-default">阅读全文</a>
-                    </div>
-                    <div class="post-footer">
-                        <hr/>
-                        <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                        &nbsp;&nbsp;{% for tag in blog.tags.split %}&nbsp;&nbsp;<span>{{ tag }}</span>{% endfor %}
-                    </div>
-                </article>
-            {% endfor %}
-            <div id="daohanglan">
-                <nav aria-label="...">
-                    <ul class="pager">
-                        {% if blogs.has_previous %}
-                            <li class="previous"><a href="?page={{ blogs.previous_page_number }}"><span
-                                    aria-hidden="true">&larr;</span> Newer</a></li>
-                        {% else %}
-                            <li class="previous disabled"><a><span aria-hidden="true">&larr;</span> Newer</a></li>
-                        {% endif %}
-                        {#  <li>{{ now_page }}/{{ num_pages }}</li>#}
-                        {% for pg in blogs.paginator.page_range %}
-                            <li class="active"><a href="?page={{ pg }}">{{ pg }} <span class="sr-only">(current)</span></a>
-                            </li>
+            {% block left_content %}
+                {# 轮播图 #}
+                <br/>
+                <div class="swiper-container" id="lunbotu">
+                    <div class="swiper-wrapper">
+                        {% for swiper in swipers %}
+                            <div class="swiper-slide"><a {% if swiper.swiper_url %}href="{{ swiper.swiper_url }}"
+                                                         {% else %}href="javascript:void(0)"
+                                                         {% endif %}>
+                                <img src="{{ swiper.swiper_img_url }}" width="100%">
+                            </a></div>
                         {% endfor %}
-                        {% if blogs.has_next %}
-                            <li class="next"><a href="?page={{ blogs.next_page_number }}">Older <span
-                                    aria-hidden="true">&rarr;</span></a>
-                            </li>
-                        {% else %}
-                            <li class="next disabled"><a>Older <span aria-hidden="true">&rarr;</span></a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            </div>
+                    </div>
+                    <!-- 如果需要分页器 -->
+                    <div class="swiper-pagination"></div>
 
+                    <!-- 如果需要导航按钮 -->
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+                <br/>
+                {% for blog in blogs %}
+                    <article id="{{ blog.id }}" class="blog-post">
+                        <div class="post-head">
+                            <h1 class="post-title"><a href="{% url 'blog:blog_detail' blog.id %}">{{ blog.title }}</a>
+                            </h1>
+                            <div class="post-meta">
+                                <span class="author">作者：<a href="#">{{ blog.author_id }}</a></span> •
+                                <time class="post-date" datetime="2018年5月17日星期四凌晨3点41分" title="2018年5月17日星期四凌晨3点41分">
+                                    <span class="glyphicon glyphicon-calendar"></span> {{ blog.create_time|date:"Y-m-d" }}
+                                </time>
+                                •
+                                <span class="carousel">分类：<a href="#">{{ blog.carousel_id }}</a></span>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ blog.summary }} ......</p>
+                        </div>
+                        <div class="post-permalink">
+                            <a href="{% url 'blog:blog_detail' blog.id %}" class="btn btn-default">阅读全文</a>
+                        </div>
+                        <div class="post-footer">
+                            <hr/>
+                            <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                            &nbsp;&nbsp;{% for tag in blog.tags.split %}&nbsp;&nbsp;<span>{{ tag }}</span>{% endfor %}
+                        </div>
+                    </article>
+                {% endfor %}
+                <div id="daohanglan">
+                    <nav aria-label="...">
+                        <ul class="pager">
+                            {% if blogs.has_previous %}
+                                <li class="previous"><a href="?page={{ blogs.previous_page_number }}"><span
+                                        aria-hidden="true">&larr;</span> Newer</a></li>
+                            {% else %}
+                                <li class="previous disabled"><a><span aria-hidden="true">&larr;</span> Newer</a></li>
+                            {% endif %}
+                            {#  <li>{{ now_page }}/{{ num_pages }}</li>#}
+                            {% for pg in blogs.paginator.page_range %}
+                                {% if blogs.has_previous %}
+                                    {% ifequal pg blogs.previous_page_number %}
+                                        <li class=""><a href="?page={{ pg }}">{{ pg }} <span
+                                                class="sr-only">(current)</span></a>
+                                        </li>
+                                    {% endifequal %}
+                                {% endif %}
+
+                                {% ifequal pg blogs.number %}
+                                    <li class="active" style="background-color: #9d9d9d"><a
+                                            href="?page={{ pg }}">{{ pg }} <span
+                                            class="sr-only">(current)</span></a>
+                                    </li>
+                                {% endifequal %}
+
+                                {% if blogs.has_next %}
+                                    {% ifequal pg blogs.next_page_number %}
+                                        <li class=""><a href="?page={{ pg }}">{{ pg }} <span
+                                                class="sr-only">(current)</span></a>
+                                        </li>
+                                    {% endifequal %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if blogs.has_next %}
+                                <li class="next"><a href="?page={{ blogs.next_page_number }}">Older <span
+                                        aria-hidden="true">&rarr;</span></a>
+                                </li>
+                            {% else %}
+                                <li class="next disabled"><a>Older <span aria-hidden="true">&rarr;</span></a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endblock %}
         </main>
 
         <aside class="col-md-4 sidebar">
@@ -100,9 +125,11 @@
                 <h1 id="biaoqianyunwenzi">标签云</h1>
                 <div id="tagscloud">
                     {% for tag in tags %}
-                        <a href="/blog/search/?kw={{ tag }}" class="tagc1">{{ tag }}</a>
-                        <a href="/blog/search/?kw={{ tag }}" class="tagc2">{{ tag }}</a>
-                        <a href="/blog/search/?kw={{ tag }}" class="tagc5">{{ tag }}</a>
+                        {% if forloop.counter < 15 %}
+                            <a href="/blog/search/?kw={{ tag }}" class="tagc1">{{ tag }}</a>
+                            <a href="/blog/search/?kw={{ tag }}" class="tagc2">{{ tag }}</a>
+                            <a href="/blog/search/?kw={{ tag }}" class="tagc5">{{ tag }}</a>
+                        {% endif %}
                     {% endfor %}
                 </div>
                 <br/>
@@ -134,8 +161,9 @@
 {% endblock %}
 {% block extJs %}
     {{ block.super }}
-    <script type="text/javascript" src="{% static 'js/users/zzsc.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/users/zzsc.js' %}"></script>
+
     {#    <script type="text/javascript" src="{% static 'js/users/jquery.tagcanvas.js' %}"></script>#}
     {#    <script type="text/javascript" src="{% static 'js/users/excanvas.js' %}"></script>#}
 {% endblock %}

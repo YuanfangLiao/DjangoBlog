@@ -12,15 +12,19 @@ urlpatterns = [
     path('check_user_exist/', views.check_user_exist, name='check_user_exist'),
     path('check_email_exist/', views.check_email_exist, name='check_email_exist'),
     path('go_personal_center/', views.go_personal_center, name='go_personal_center'),
-    path('manage_article/', views.manage_article, name='manage_blog'),
+    path('manage_carousel/', views.manage_carousel, name='manage_carousel'),
+    path('manage_nav/', views.manage_nav, name='manage_nav'),
+    path('manage_swiper/', views.manage_swiper, name='manage_swiper'),
 
     # 正则匹配
+    re_path(r'^manage_article/', views.manage_article, name='manage_blog'),
     re_path(r'^get_verification_code/', views.get_verification_code, name='get_verification_code'),
 
     # 下面是个人中心界面的路由
     # 用于去到个人中心不同的页面
     path('go_user_center_somewhere/<str:somewhere1>/', views.go_user_center_somewhere, name='go_user_center_somewhere'),
-    path('go_user_center_somewhere/<str:somewhere1>/<str:somewhere2>/', views.go_user_center_somewhere, name='go_user_center_somewhere2'),
+    path('go_user_center_somewhere/<str:somewhere1>/<str:somewhere2>/', views.go_user_center_somewhere,
+         name='go_user_center_somewhere2'),
 
     path('do_change_img/', views.do_change_img, name='do_change_img'),
     path('do_change_password/', views.do_change_password, name='do_change_password'),
@@ -31,7 +35,7 @@ urlpatterns = [
 
     path('go_my_message/', views.go_my_message, name='go_my_message'),
     # 发送邮箱验证码
-    path('do_send_email_verification_code/', views.do_send_email_verification_code, name='do_send_email_verification_code'),
-
+    path('do_send_email_verification_code/', views.do_send_email_verification_code,
+         name='do_send_email_verification_code'),
 
 ]
