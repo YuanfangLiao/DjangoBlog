@@ -3,106 +3,144 @@
 
 {% block content_detail %}
 
+
     <div class="row">
-        {# 轮播图 #}
-        <div class="swiper-container" id="lunbotu">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><a href="#"><img src="{% static 'img/1.jpg' %}" width="100%"></a></div>
-                <div class="swiper-slide"><a href="#"><img src="{% static 'img/2.jpg' %}" width="100%"></a></div>
-                <div class="swiper-slide"><a href="#"><img src="{% static 'img/3.jpg' %}" width="100%"></a></div>
-                <div class="swiper-slide"><a href="#"><img src="{% static 'img/4.jpg' %}" width="100%"></a></div>
-            </div>
-            <!-- 如果需要分页器 -->
-            <div class="swiper-pagination"></div>
 
-            <!-- 如果需要导航按钮 -->
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-        </div>
         <main class="col-md-8 main-content">
+            {% block left_content %}
+                {# 轮播图 #}
+                <br/>
+                <div class="swiper-container" id="lunbotu">
+                    <div class="swiper-wrapper">
+                        {% for swiper in swipers %}
+                            <div class="swiper-slide"><a {% if swiper.swiper_url %}href="{{ swiper.swiper_url }}"
+                                                         {% else %}href="javascript:void(0)"
+                                                         {% endif %}>
+                                <img src="{{ swiper.swiper_img_url }}" width="100%">
+                            </a></div>
+                        {% endfor %}
+                    </div>
+                    <!-- 如果需要分页器 -->
+                    <div class="swiper-pagination"></div>
 
-            {% for blog in blogs %}
-                <article id="{{ blog.id }}" class="blog-post">
-                    <div class="post-head">
-                        <h1 class="post-title"><a href="{% url 'blog:blog_detail' blog.id %}">{{ blog.title }}</a></h1>
-                        <div class="post-meta">
-                            <span class="author">作者：<a href="#">{{ blog.author_id }}</a></span> •
-                            <time class="post-date" datetime="2018年5月17日星期四凌晨3点41分" title="2018年5月17日星期四凌晨3点41分">
-                                <span class="glyphicon glyphicon-calendar"></span> {{ blog.create_time|date:"Y-m-d" }}
-                            </time>
-                            •
-                            <span class="carousel">分类：<a href="#">{{ blog.carousel_id }}</a></span>
+                    <!-- 如果需要导航按钮 -->
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+                <br/>
+                {% for blog in blogs %}
+                    <article id="{{ blog.id }}" class="blog-post">
+                        <div class="post-head">
+                            <h1 class="post-title"><a href="{% url 'blog:blog_detail' blog.id %}">{{ blog.title }}</a>
+                            </h1>
+                            <div class="post-meta">
+                                <span class="author">作者：<a href="#">{{ blog.author_id }}</a></span> •
+                                <time class="post-date" datetime="2018年5月17日星期四凌晨3点41分" title="2018年5月17日星期四凌晨3点41分">
+                                    <span class="glyphicon glyphicon-calendar"></span> {{ blog.create_time|date:"Y-m-d" }}
+                                </time>
+                                •
+                                <span class="carousel">分类：<a href="#">{{ blog.carousel_id }}</a></span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="post-content">
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ blog.summary }} ......</p>
-                    </div>
-                    <div class="post-permalink">
-                        <a href="{% url 'blog:blog_detail' blog.id %}" class="btn btn-default">阅读全文</a>
-                    </div>
-                    <div class="post-footer">
-                        <hr/>
-                        <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                        &nbsp;&nbsp;{% for tag in blog.tags.split %}&nbsp;&nbsp;<span>{{ tag }}</span>{% endfor %}
-                    </div>
-                </article>
-            {% endfor %}
+                        <div class="post-content">
+                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ blog.summary }} ......</p>
+                        </div>
+                        <div class="post-permalink">
+                            <a href="{% url 'blog:blog_detail' blog.id %}" class="btn btn-default">阅读全文</a>
+                        </div>
+                        <div class="post-footer">
+                            <hr/>
+                            <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                            &nbsp;&nbsp;{% for tag in blog.tags.split %}&nbsp;&nbsp;<span>{{ tag }}</span>{% endfor %}
+                        </div>
+                    </article>
+                {% endfor %}
+                <div id="daohanglan">
+                    <nav aria-label="...">
+                        <ul class="pager">
+                            {% if blogs.has_previous %}
+                                <li class="previous"><a href="?page={{ blogs.previous_page_number }}"><span
+                                        aria-hidden="true">&larr;</span> Newer</a></li>
+                            {% else %}
+                                <li class="previous disabled"><a><span aria-hidden="true">&larr;</span> Newer</a></li>
+                            {% endif %}
+                            {#  <li>{{ now_page }}/{{ num_pages }}</li>#}
+                            {% for pg in blogs.paginator.page_range %}
+                                {% if blogs.has_previous %}
+                                    {% ifequal pg blogs.previous_page_number %}
+                                        <li class=""><a href="?page={{ pg }}">{{ pg }} <span
+                                                class="sr-only">(current)</span></a>
+                                        </li>
+                                    {% endifequal %}
+                                {% endif %}
 
+                                {% ifequal pg blogs.number %}
+                                    <li class="active" style="background-color: #9d9d9d"><a
+                                            href="?page={{ pg }}">{{ pg }} <span
+                                            class="sr-only">(current)</span></a>
+                                    </li>
+                                {% endifequal %}
 
+                                {% if blogs.has_next %}
+                                    {% ifequal pg blogs.next_page_number %}
+                                        <li class=""><a href="?page={{ pg }}">{{ pg }} <span
+                                                class="sr-only">(current)</span></a>
+                                        </li>
+                                    {% endifequal %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if blogs.has_next %}
+                                <li class="next"><a href="?page={{ blogs.next_page_number }}">Older <span
+                                        aria-hidden="true">&rarr;</span></a>
+                                </li>
+                            {% else %}
+                                <li class="next disabled"><a>Older <span aria-hidden="true">&rarr;</span></a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endblock %}
         </main>
 
         <aside class="col-md-4 sidebar">
-
-            <div id="weather-div">
-                <h1>天气预报</h1>
-                <iframe id="weather" width="100%" scrolling="no" height="30" frameborder="0" allowtransparency="true"
-                        src="//i.tianqi.com/index.php?c=code&id=10&color=%23&bgc=%23FFFFFF&bdc=%23&icon=1&py=hangzhou&site=13"></iframe>
-            </div>
-            <div class="search">
-                <form class="form-inline" role="form" method="get" action="/blog/search/">
-                    <div class="form-group">
-                        <label for="search-bar"></label>
-                        <input type="text" class="form-control" placeholder="站内搜索" id="search-bar" name="kw">
-                    </div>
-
-                    <button class="btn btn-danger">
-                        <span class="glyphicon glyphicon-search"></span>
-                    </button>
-                </form>
-            </div>
-
-
-            <div class="widget" id="biaoqianyun">
-                <h4 class="title">标签云</h4>
-                <div class="content tag-cloud">
-                    <a href="/tag/ke-hu-duan/">客户端</a>
-                    <a href="/tag/android/">Android</a>
-                    <a href="/tag/jquery/">jQuery</a>
-                    <a href="/tag/ghost-0-7-ban-ben/">Ghost 0.7 版本</a>
-                    <a href="/tag/opensource/">开源</a>
-                    <a href="/tag/zhu-shou-han-shu/">助手函数</a>
-                    <a href="/tag/tag-cloud/">标签云</a>
-                    <a href="/tag/navigation/">导航</a>
-                    <a href="/tag/customize-page/">自定义页面</a>
-                    <a href="/tag/static-page/">静态页面</a>
-                    <a href="/tag/roon-io/">Roon.io</a>
-                    <a href="/tag/configuration/">配置文件</a>
-                    <a href="/tag/upyun/">又拍云存储</a>
-                    <a href="/tag/upload/">上传</a>
-                    <a href="/tag/handlebars/">Handlebars</a>
-                    <a href="/tag/email/">邮件</a>
-                    <a href="/tag/shortcut/">快捷键</a>
-                    <a href="/tag/yong-hu-zhi-nan/">用户指南</a>
-                    <a href="/tag-cloud/">...</a>
+            <div id="sousuodiv">
+                <div class="search bar3 yuanhudediv">
+                    <form method="get" action="/blog/search/">
+                        <input type="text" placeholder="站内搜索..." name="kw">
+                        <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                    </form>
                 </div>
             </div>
-
+            <div id="weather-div" class="yuanhudediv">
+                <br/>
+                <h1>天气预报</h1>
+                <br/>
+                <iframe width="350" scrolling="no" height="100" frameborder="0" allowtransparency="true"
+                        src="//i.tianqi.com/index.php?c=code&id=2&bgc=%23&bdc=%23&icon=2&num=2&site=14"></iframe>
+            </div>
+            <br/>
+            <div id="my_biaoqianyun" class="yuanhudediv">
+                <br/>
+                <h1 id="biaoqianyunwenzi">标签云</h1>
+                <div id="tagscloud">
+                    {% for tag in tags %}
+                        {% if forloop.counter < 15 %}
+                            <a href="/blog/search/?kw={{ tag }}" class="tagc1">{{ tag }}</a>
+                            <a href="/blog/search/?kw={{ tag }}" class="tagc2">{{ tag }}</a>
+                            <a href="/blog/search/?kw={{ tag }}" class="tagc5">{{ tag }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <br/>
+            </div>
+            <br/>
             <div class="list-group">
                 <a href="#" class="list-group-item disabled" style="font-size: 15px">
                     文章分类
                 </a>
                 {% for carouse in carouses %}
-                    <a href="#" class="list-group-item">
+                    <a href="/blog/search/?kw={{ carouse.title }}" class="list-group-item">
                         <span class="badge">{{ carouse.total_number }}</span>
                         {{ carouse.title }}
                     </a>
@@ -117,4 +155,15 @@
     {{ block.super }}
     {# indexCss #}
     <link type="text/css" rel="stylesheet" href="{% static 'css/users/for_index.css' %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/blog/zzsc.css' %}"/>
+    {#    <link type="text/css" rel="stylesheet" href="{% static 'css/blog/biaoqiancloud.css' %}"/>#}
+
+{% endblock %}
+{% block extJs %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/users/zzsc.js' %}"></script>
+
+    {#    <script type="text/javascript" src="{% static 'js/users/jquery.tagcanvas.js' %}"></script>#}
+    {#    <script type="text/javascript" src="{% static 'js/users/excanvas.js' %}"></script>#}
 {% endblock %}

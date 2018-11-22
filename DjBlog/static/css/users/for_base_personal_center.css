@@ -8,6 +8,7 @@
     height: 50rem;
     background-color: white;
     box-shadow: 0 0 0.1rem #000;
+    overflow: auto;
 }
 
 #right_part .list-group {
@@ -16,6 +17,7 @@
 
 #right_part a p {
     font-size: 1rem;
+    /*overflow: auto;*/
 }
 
 #personal_img {

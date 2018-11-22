@@ -1,0 +1,172 @@
+{% extends 'base_main.html' %}
+{% load static %}
+
+{% block content_detail %}
+    <div class="page-header" style="font-size: 45px">
+        <h1>&nbsp;&nbsp;&nbsp;&nbsp;修改博客
+            <small>编辑您的博客</small>
+        </h1>
+    </div>
+    <form class="form-horizontal" role="form" id="blog_form">
+        <div class="form-group form-group-lg">
+            <label class="col-sm-2 control-label" for="blog_title">*文章标题：</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" id="blog_title" placeholder="博客的标题" value="{{ blog.title }}">
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label" for="eng_title">English Title：</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" id="eng_title" placeholder="English Title"
+                       value="{{ blog.en_title }}">
+            </div>
+        </div>
+    </form>
+    <br/>
+    <textarea style="display: none" id="textarea_not_show">{{ blog.content }}</textarea>
+    <div id="test-editormd">
+        <textarea name="content" id="blog_content" style="display:none;"></textarea>
+    </div>
+
+    <div class="form-group form-group-sm">
+        <label class="col-sm-2 control-label" for="blog_tags">标签：</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="text" id="blog_tags" placeholder="添加文章的标签，以逗号分割"
+                   value="{{ blog.tags }}">
+        </div>
+    </div>
+    <br/><br/>
+
+    <div class="form-group form-group-sm">
+        <label class="col-sm-2 control-label" for="inlineRadio{{ forloop.counter }}">分类：</label>
+        <div class="col-sm-10">
+            {% for carousel in carousels %}
+                <label class="radio-inline">
+                    <input type="radio" name="blog_carousel" id="inlineRadio{{ forloop.counter }}"
+                           value="{{ carousel.title }}" {% if  carousel.title  == blog.carousel_id %}
+                           checked="checked"
+                    {% endif %} > {{ carousel.title }}
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    <br/><br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button type="button" class="btn btn-danger btn-lg" id="post_blog_go">保存博客</button>
+
+{% endblock %}
+
+{% block extCss %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'plugins/editor-1.md-master/css/editormd.css' %}"/>
+    <style>
+        #blog_form {
+            margin-top: 30px;
+        }
+    </style>
+{% endblock %}
+{% block extJs %}
+    {{ block.super }}
+    <script src="{% static 'plugins/editor-1.md-master/editormd.js' %}"></script>
+    <script>
+        var testEditor;
+
+        $('#post_blog_go').click(function () {
+            let blog_title = $('#blog_title').val();
+            let eng_title = $('#eng_title').val();
+            let blog_content = $('#blog_content').val();
+            let blog_tags = $('#blog_tags').val();
+            let blog_carousel = $('input[name=blog_carousel]:checked').val();
+            let blog_id = '{{ blog.id }}';
+            if (!blog_title) {
+                alert('请输入博客标题');
+                return false;
+            }
+            if (!blog_content) {
+                alert('请输入博客正文再提交');
+                return false;
+            }
+            if (!blog_tags) {
+                alert('请至少添加一个标签');
+                return false;
+            }
+            if (!blog_carousel) {
+                alert('请选择博客分类');
+                return false
+
+            }
+            let trans_data = {
+                'blog_title': blog_title,
+                'eng_title': eng_title,
+                'blog_content': blog_content,
+                'blog_tags': blog_tags,
+                'blog_carousel': blog_carousel,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+                'blog_id': blog_id
+            };
+            console.log(trans_data['eng_title']);
+            {#console.log(trans_data['blog_content']);#}
+            $.ajax({
+                url: '{% url 'blog:do_post_new_blog' %}',
+                type: 'post',
+                data: trans_data,
+                dataType: 'json',
+                success: function (data) {
+                    if (data['code'] === 200) {
+                        alert('恭喜，修改博客成功');
+                        window.open('/blog/', target = '_self')
+                    } else {
+                        alert('服务器错误,code:' + data['code'] + ' ,msg:' + data['msg'])
+                    }
+                },
+                error: function (xhr, status, err) {
+                    alert("抱歉，服务器出了点小问题TAT,快联系作者上报bug吧TAT");
+                    console.log(xhr.responseText);
+                    console.log(status);
+                    console.log(err);
+                }
+            });
+            // 这里返回false防止页面刷新
+            return false;
+        });
+
+        $(function () {
+            let content_detail = $('#textarea_not_show').val();
+            console.log(content_detail);
+            $.get("{% static 'plugins/editor-1.md-master/examples/test.md' %}", function (md) {
+                testEditor = editormd("test-editormd", {
+                    width: "98%",
+                    height: 730,
+                    {#path: 'lib/',#}
+                    path: '{% static 'plugins/editor-1.md-master/lib/' %}',
+                    markdown: content_detail,
+                    codeFold: true,
+                    saveHTMLToTextarea: true,
+                    searchReplace: true,
+                    htmlDecode: "style,script,iframe|on*",
+                    emoji: true,
+                    taskList: true,
+                    tocm: true,         // Using [TOCM]
+                    tex: true,                   // 开启科学公式TeX语言支持，默认关闭
+                    flowChart: true,             // 开启流程图支持，默认关闭
+                    sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,
+
+                    imageUpload: true,
+                    imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                    {#imageUploadURL: "{% static 'plugins/editor-1.md-master/examples/php/upload.php' %}",#}
+                    imageUploadURL: "{% url 'blog:blog_img_upload' %}",
+                    onload: function () {
+                        console.log('onload', this);
+                    },
+
+                    {#/**设置主题颜色*/#}
+                    {#editorTheme: "pastel-on-dark",#}
+                    {#theme: "dark",#}
+                    {#previewTheme: "dark"#}
+                });
+            });
+        });
+
+    </script>
+{% endblock %}

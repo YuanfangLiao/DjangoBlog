@@ -4,6 +4,7 @@
 {% block extCss %}
     {{ block.super }}
     <link type="text/css" rel="stylesheet" href="{% static 'css/users/for_base_personal_center.css' %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static 'js/users/jquery.Jcrop.min.css' %}"/>
 
     {#fileinput插件#}
     {#    <link href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/css/fileinput.min.css" rel="stylesheet">#}
@@ -15,6 +16,8 @@
     {# ajaxSubmit插件 #}
 
     <script src="{% static 'js/users/jquery.form.min.js' %}"></script>
+    <script src="{% static 'js/users/jquery.Jcrop.min.js' %}"></script>
+    <script src="{% static 'js/users/jquery.cookie.js' %}"></script>
     {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>#}
     {#fileinput插件#}
     {#    <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/js/fileinput.min.js"></script>#}
@@ -22,43 +25,80 @@
 {% endblock %}
 
 {% block content_detail %}
-
     <div class="row" id="all_personal_center">
-        <div class="col-md-9 col-xs-9">
-            <div id="personal_center_content">
-                欢迎你{{ uid }}
-            </div>
-        </div>
-        <div class="col-md-3 col-xs-3" id="right_part">
+        <div class="col-md-3 main-content" id="right_part">
             <div class="list-group">
                 <div id="personal_img">
                     {# 如果有imgUrl #}
                     {% if imgUrl %}
                         <img src="{{ imgUrl }}" alt="头像" class="img-circle"><br>
-                        {% else %}
+                    {% else %}
                         <img src="{% static 'img/favicon.ico' %}" alt="头像" class="img-circle"><br>
                     {% endif %}
                     <p>{{ uid }}</p>
                 </div>
-                <a href="#" class="list-group-item active" id="change_img">
+                <a href="javascript:void(0)" class="list-group-item" id="change_img">
                     <p>修改头像</p>
                 </a>
-                <a href="#" class="list-group-item" id="change_profile">
+                <a href="javascript:void(0)" class="list-group-item" id="change_profile">
                     <p>个人资料</p>
                 </a>
-                <a href="#" class="list-group-item" id="change_password">
+                <a href="javascript:void(0)" class="list-group-item" id="change_password">
                     <p>修改密码</p>
                 </a>
-                <a href="#" class="list-group-item" id="my_comment">
+                <a href="javascript:void(0)" class="list-group-item" id="my_comment">
                     <p>我的评论</p>
                 </a>
-                <a href="#" class="list-group-item" id="my_message">
-                    <span class="badge">14</span>
+                <a href="javascript:void(0)" class="list-group-item" id="my_message">
+                    <span class="badge">1</span>
                     <p>我的消息</p>
                 </a>
-                <a href="#" class="list-group-item" id="exit_system">
+                {% if user.user_is_admin %}
+                    <a href="javascript:void(0)" class="list-group-item" id="manage_article">
+                        <p>管理博文</p>
+                    </a>
+                    <a href="javascript:void(0)" class="list-group-item" id="manage_carousel">
+                        <p>管理分类</p>
+                    </a>
+                    <a href="javascript:void(0)" class="list-group-item" id="manage_nav">
+                        <p>管理导航栏</p>
+                    </a>
+                    <a href="javascript:void(0)" class="list-group-item" id="manage_swiper">
+                        <p>管理轮播图</p>
+                    </a>
+                {% endif %}
+                {% if not user.user_is_admin %}
+                    <a href="javascript:void(0)" class="list-group-item" id="apply_admin">
+                        <p>申请管理员</p>
+                    </a>
+                {% endif %}
+                <a href="javascript:void(0)" class="list-group-item" id="exit_system">
                     <p>退出登录</p>
                 </a>
+            </div>
+        </div>
+        <div class="col-md-9 sidebar">
+            <div id="personal_center_content">
+                <div style="text-align: center">
+                    <br/>
+                    <h1 style="font-size: 45px">欢迎,尊敬的{{ uid }}</h1>
+                    <br/>
+                    {% if imgUrl %}
+                        <img src="{{ imgUrl }}" alt="头像" class="img-circle" width="100px"><br>
+                    {% else %}
+                        <img src="{% static 'img/favicon.ico' %}" alt="头像" class="img-circle" width="100px"> <br>
+                    {% endif %}
+                    <br/>
+                    <h5>感谢您使用DjBlog博客系统</h5>
+                    {% if not user.user_is_admin %}
+                        <h6>您是普通用户</h6>
+                        <p>您可以使用个人中心修改您的个人信息，也可以<a>申请成为管理员</a></p>
+                        <p>成为管理员后，您可以管理本站资源，发表博客</p>
+                    {% else %}
+                        <h6>您是管理员</h6>
+                        <p>您可以使用个人中心修改您的个人信息，并管理此系统</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
