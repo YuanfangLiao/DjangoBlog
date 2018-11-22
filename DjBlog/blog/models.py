@@ -11,6 +11,7 @@ STATUS = {
     0: u'正常',
     1: u'草稿',
     2: u'删除',
+    3: u'彻底删除'
 }
 
 
@@ -32,7 +33,7 @@ class CarouselModel(models.Model):
 
 # 博客文章表
 class BlogPostModel(models.Model):
-    author = models.ForeignKey(settings.USER_MODEL,max_length=100, verbose_name=u'作者', on_delete=PROTECT)
+    author = models.ForeignKey(settings.USER_MODEL, max_length=100, verbose_name=u'作者', on_delete=PROTECT)
     carousel = models.ForeignKey(CarouselModel, verbose_name=u'分类', on_delete=PROTECT)
     title = models.CharField(max_length=100, verbose_name=u'标题')
     en_title = models.CharField(max_length=100, null=True, verbose_name=u'英文标题')
@@ -51,8 +52,15 @@ class BlogPostModel(models.Model):
     update_time = models.DateTimeField(u'更新时间', auto_now=True)
 
     def get_tags(self):
+        self.tags.replace('\ ', ',')
         tags_list = self.tags.split(',')
-        while '' in tags_list:
-            tags_list.remove('')
-
+        while ' ' in tags_list:
+            tags_list.remove(' ')
         return tags_list
+
+
+# 轮播图
+class Swipers(models.Model):
+    swiper_img_url = models.TextField(max_length=100, null=False)
+    swiper_url = models.TextField(max_length=100, null=True)
+    swiper_title = models.TextField(max_length=100, null=True)

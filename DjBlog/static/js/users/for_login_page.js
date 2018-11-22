@@ -1,5 +1,5 @@
 $(function () {
-    $('#do_submit').prop('disabled', true);
+    //$('#do_submit').prop('disabled', true);
 
     // 设置点击事件,点击验证码刷新
     $('#verificationCode').click(function () {
@@ -62,16 +62,16 @@ $(function () {
 
 
         // 完事后最后一步，判断是不是全部ok，完事再允许点击提交按钮
-        judge_is_ok_to_login()
+        // judge_is_ok_to_login()
     });
 
-    function judge_is_ok_to_login() {
-        if (judge_all_input_have_value()) {
-            $('#do_submit').prop('disabled', false);
-        } else {
-            $('#do_submit').prop('disabled', true);
-        }
-    }
+    // function judge_is_ok_to_login() {
+    //     if (judge_all_input_have_value()) {
+    //         $('#do_submit').prop('disabled', false);
+    //     } else {
+    //         $('#do_submit').prop('disabled', true);
+    //     }
+    // }
 
     // 判断是不是所有的input都有值了
     function judge_all_input_have_value() {

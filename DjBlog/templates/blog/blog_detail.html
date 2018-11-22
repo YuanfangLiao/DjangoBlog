@@ -2,13 +2,70 @@
 {% load static %}
 
 {% block content_detail %}
-    {{ block.super }}
+    <br/>
+    <div id="inthecontent" style="padding: 20px;font-size: 12px">
+        <ol class="breadcrumb">
+            <li><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;Home</a></li>
+            <li><a href="">{{ post.carousel_id }}</a></li>
+            <li><span class="glyphicon glyphicon-calendar"></span>&nbsp;{{ post.update_time|date:"Y-m-d" }}</li>
+            <li><span class="glyphicon glyphicon-eye-open"></span>&nbsp;{{ post.view_times }}</li>
+            <li style="float: right"><span class="glyphicon glyphicon-user"></span></span>&nbsp;{{ post.author_id }}
+            </li>
+        </ol>
+        &nbsp;
+        {% for tag in tags %}
+            {% if forloop.counter == 1 or forloop.counter == 6 %}
+                <span class="label label-primary">{{ tag }}</span>
+            {% elif forloop.counter == 2 or forloop.counter == 7 %}
+                <span class="label label-success">{{ tag }}</span>
+            {% elif forloop.counter == 3 or forloop.counter == 8 %}
+                <span class="label label-info">{{ tag }}</span>
+            {% elif forloop.counter == 4 or forloop.counter == 9 %}
+                <span class="label label-warning">{{ tag }}</span>
+            {% elif forloop.counter == 5 or forloop.counter == 10 %}
+                <span class="label label-danger">{{ tag }}</span>
+            {% endif %}
+        {% endfor %}
 
-    <div id="inthecontent">
+        <div class="page-header" style="font-size: 45px">
+            <h1>{{ post.title }}<br/>
+                <small>{{ post.en_title }}</small>
+            </h1>
+        </div>
+
         <div class="markdown-body" style="padding: 20px;">
             {{ post.body|safe }}
         </div>
     </div>
+    <br/>
+    <div style="width:100%; background-color:white;padding: 20px;font-size: 12px">
+        <table width="100%">
+            <tr>
+                <td>
+                    {% if imgUrl %}
+                        <img src="{{ imgUrl }}" alt="头像" class="img-circle" width="50px"
+                             style=" display: inline;float: left"><br>
+                    {% else %}
+                        <img src="{% static 'img/favicon.ico' %}" alt="头像" class="img-circle" width="50px"
+                             style=" display: inline"> <br>
+                    {% endif %}
+                </td>
+                <td width="90%">
+                    <form style="display: inline; width: 100%" action="{% url 'society:add_comment_to_blog' %}" method="post">
+                        {% csrf_token %}
+                        <textarea id="comment" name="comment" class="form-control" rows="5"
+                                  placeholder="请输入评论 200以内！" style="width: 100%"></textarea>
+                        <input type="text" style="display: none;" name="article_id" value="{{ blog.id }}">
+                        <br/>
+                        <button type="submit" style="float: right" class="btn btn-danger">提交</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+
 
 {% endblock %}
 

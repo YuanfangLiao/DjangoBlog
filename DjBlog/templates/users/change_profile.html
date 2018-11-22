@@ -22,17 +22,6 @@
             </label>
         </div>
         <br/>
-
-        <fieldset disabled>
-            <div class="form-group">
-                <label class="control-label" for="user_phone">手机号:</label>
-                <input type="text" class="form-control" name="user_phone" id="user_phone"
-                       aria-describedby="helpBlock2" {% if user.user_phone %}value="{{ user.user_phone }}"{% endif %}>
-            </div>
-        </fieldset>
-        <input type="button" class="btn btn-info" id="go_change_phone" value="修改手机号">
-        <br/><br/>
-
         <fieldset disabled>
             <div class="form-group">
                 <label class="control-label" for="user_email">邮箱号:</label>
@@ -41,7 +30,18 @@
                        pattern="^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$">
             </div>
         </fieldset>
-        <input type="button" class="btn btn-info" id="go_change_email" value="修改邮箱">
+        <input type="button" class="btn btn-info" id="go_change_email" value="修改邮箱号">
+
+        <br/><br/>
+        <fieldset disabled>
+            <div class="form-group">
+                <label class="control-label" for="user_phone">手机号:</label>
+                <input type="text" class="form-control" name="user_phone" id="user_phone" placeholder="抱歉，修改手机功能暂未开放"
+                       aria-describedby="helpBlock2" {% if user.user_phone %}value="{{ user.user_phone }}"{% endif %}>
+            </div>
+        </fieldset>
+        <input type="button" class="btn btn-info" id="go_change_phone" disabled="disabled" value="修改手机号">
+
 
         {#        <input disabled="disabled" type="button" id="do_submit" value="提交" class="btn btn-info" style="width: 100px;">#}
     </form>
@@ -87,7 +87,7 @@
                     console.log(status);
                     console.log(err);
                 }
-             })
+            })
         })
     });
 </script>

@@ -35,9 +35,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'blog',
     'users',
+    'society',
 ]
 
 MIDDLEWARE = [
@@ -80,9 +80,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'DjBlog',
-        'USER': 'root',
+        'USER': 'gople',
         'PASSWORD': '12345678',
-        'HOST': 'localhost',
+        'HOST': '47.101.39.17',
         'PORT': 3306,
     }
 }
@@ -118,6 +118,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+# 最大上传文件5M
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
@@ -147,10 +151,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/upload')
 # MEDIA_URL = '/static/'
 
 STATICFILES_FINDERS = (
-  'django.contrib.staticfiles.finders.FileSystemFinder',
-  'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-
 
 # 邮箱设置
 EMAIL_USE_SSL = True
@@ -159,3 +162,5 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = 'djblog_admin@163.com'  # 帐号
 EMAIL_HOST_PASSWORD = 'Qazwsxedc1'  # 密码
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+

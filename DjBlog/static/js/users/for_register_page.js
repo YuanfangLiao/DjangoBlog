@@ -114,9 +114,9 @@ $(function () {
             $('#warning_alert').text('*密码不能为空');
             $('#warning_alert').css('display', 'block');
         }// 正则表达式匹配 是否符合用户名输入规范
-        else if (!/^[a-zA-Z0-9_]{6,31}$/.test($(ob).val())) {
+        else if (!/^[a-zA-Z0-9_\.]{6,31}$/.test($(ob).val())) {
             $(ob).parent('.form-group').addClass('has-error');
-            $('#warning_alert').text('*密码只能由字母开头，包含字母、数字、下划线、长度为6-30个字符');
+            $('#warning_alert').text('*密码只能由字母开头，包含字母、数字、下划线和点、长度为6-30个字符');
             $('#warning_alert').css('display', 'block');
         }
         else {
