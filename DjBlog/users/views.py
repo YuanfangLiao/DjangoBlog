@@ -7,7 +7,6 @@ import random
 import re
 
 from PIL import Image, ImageDraw, ImageFont
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
@@ -15,7 +14,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from DjBlog import settings
-from blog.models import Nav, BlogPostModel
+from blog.models import Nav, BlogPostModel, CarouselModel
 from users.functions import check_logined, get_uid
 from users.models import UserModel
 from users.sendEmail import EmailSender
@@ -224,13 +223,6 @@ def get_User_Model(request):
     return None
 
 
-# # 用于管理用户中心中去到不同页面
-# def go_user_center_somewhere(request, somewhere):
-#     user = get_User_Model(request)
-#     data = {"user": user}
-#     return render(request, 'users/' + somewhere, context=data)
-#
-
 # 用于管理用户中心中去到不同页面
 def go_user_center_somewhere(request, somewhere1, somewhere2=''):
     user = get_User_Model(request)
@@ -239,10 +231,20 @@ def go_user_center_somewhere(request, somewhere1, somewhere2=''):
     return render(request, 'users/' + somewhere1 + '/' + somewhere2, context=data)
 
 
+# 管理文章
+@check_logined
 def manage_article(request):
     if request.method == "GET":
         user = get_User_Model(request)
-        blogs = BlogPostModel.objects.filter(author=user)
+        where = request.GET.get('where')
+        # 判断文章状态
+        if where == 'deleted':
+            blogs = BlogPostModel.objects.filter(status=2).filter(author=user)
+        elif where == 'drafts':
+            blogs = BlogPostModel.objects.filter(status=1).filter(author=user)
+        else:
+            blogs = BlogPostModel.objects.filter(status=0).filter(author=user)
+
         data = {"user": user,
                 'blogs': blogs
                 }
@@ -250,14 +252,9 @@ def manage_article(request):
 
 
 # 进行修改头像操作
+@check_logined
 def do_change_img(request):
     user = get_User_Model(request)
-    # img = request.FILES.get('img')
-    # # image = Image.open(img)
-    # # image.thumbnail((300, 300),Image.ANTIALIAS)
-    # # image.save(MEDIA_ROOT)
-    # user.user_img = img
-    # user.save()
 
     # 本地保存头像
     data = request.POST['tx']
@@ -267,17 +264,13 @@ def do_change_img(request):
                 request.user.username
             )
         )
-        return HttpResponse(u"上传头像错误", status=500)
+        return HttpResponse(u"上传头像错误，图片为空", status=500)
 
     imgData = base64.b64decode(data)
-    # user = UserModel()
     filename = "tx_100x100_{}.png".format(user.user_id)
     static_root = getattr(settings, 'STATIC_ROOT', None)
     filedir = os.path.join(static_root, 'upload/users')
-    # if static_root:
-    #     filedir = os.path.join(static_root, '/upload/users')
-    # if not os.path.exists(filedir):
-    #     os.makedirs(filedir)
+
     print(filedir)
     path = os.path.join(filedir, filename)
 
@@ -289,19 +282,19 @@ def do_change_img(request):
     # 修改头像分辨率
     im = Image.open(path)
     out = im.resize((100, 100), Image.ANTIALIAS)
-    # out.convert('RGB')
     try:
         out.save(path)
-        # user = UserModel()
         user.user_img = 'users/' + filename
         user.save()
     except Exception as e:
         print(e)
+        return HttpResponse(u"上传头像失败!\n错误代码:" + str(e))
 
-    return HttpResponse(u"上传头像成功!\n(注意有10分钟缓存)")
+    return HttpResponse(u"上传头像成功!刷新页面\n可能会有缓存！")
 
 
 # 进行修改性别操作
+@check_logined
 def do_change_sex(request):
     user = get_User_Model(request)
     sex = int(request.POST.get('sex'))
@@ -311,6 +304,7 @@ def do_change_sex(request):
 
 
 # 进行修改邮箱操作
+@check_logined
 def do_change_email(request):
     # 获得正确的验证码
     true_verification_code = request.COOKIES.get('email_sender_verification_code')
@@ -329,6 +323,7 @@ def do_change_email(request):
 
 
 # 进行修改密码操作
+@check_logined
 def do_change_password(request):
     user = get_User_Model(request)
 
@@ -336,8 +331,8 @@ def do_change_password(request):
     user_passwd = request.POST.get('user_passwd')
     confirm_passwd = request.POST.get('confirm_passwd')
     # 验证密码合法性
-    if not re.match('^[a-zA-Z0-9_]{6,31}$', user_passwd):
-        return JsonResponse({'code': 403, 'message': '密码只能包含字母、数字、下划线、长度为6-30个字符'})
+    if not re.match('^[a-zA-Z0-9_\.]{6,31}$', user_passwd):
+        return JsonResponse({'code': 403, 'message': '密码只能包含字母、数字、下划线和点、长度为6-30个字符'})
 
     # 检验密码啦
     MD5 = hashlib.md5()
@@ -379,12 +374,14 @@ def do_change_password(request):
         return JsonResponse({'code': 500, 'message': '用户未登录或者服务器出现了问题'})
 
 
+@check_logined
 def go_my_comment(request):
     user = get_User_Model(request)
     data = {"user": user}
     return render(request, 'users/my_comment.html', context=data)
 
 
+@check_logined
 def go_my_message(request):
     user = get_User_Model(request)
     data = {"user": user}
@@ -413,6 +410,23 @@ def do_send_email_verification_code(request):
         return JsonResponse({'code': '501', 'msg': '发送邮件错误'})
 
 
-# 404页面
-def page_not_found(request):
-    return HttpResponse("40404040404")
+# 管理分类表
+@check_logined
+def manage_carousel(request):
+    carousels = CarouselModel.objects.all().order_by('title')
+    data = {}
+    data['carousels'] = carousels
+    return render(request, 'users/manage_carousel.html', context=data)
+
+
+@check_logined
+def manage_nav(request):
+    navs = Nav.objects.all().order_by('name')
+    data = {}
+    data['navs'] = navs
+    return render(request, 'users/manage_nav.html',context=data)
+
+
+@check_logined
+def manage_swiper(request):
+    return render(request, 'users/manage_swiper.html')

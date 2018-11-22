@@ -37,42 +37,42 @@
                     {% endif %}
                     <p>{{ uid }}</p>
                 </div>
-                <a href="#" class="list-group-item active" id="change_img">
+                <a href="javascript:void(0)" class="list-group-item" id="change_img">
                     <p>修改头像</p>
                 </a>
-                <a href="#" class="list-group-item" id="change_profile">
+                <a href="javascript:void(0)" class="list-group-item" id="change_profile">
                     <p>个人资料</p>
                 </a>
-                <a href="#" class="list-group-item" id="change_password">
+                <a href="javascript:void(0)" class="list-group-item" id="change_password">
                     <p>修改密码</p>
                 </a>
-                <a href="#" class="list-group-item" id="my_comment">
+                <a href="javascript:void(0)" class="list-group-item" id="my_comment">
                     <p>我的评论</p>
                 </a>
-                <a href="#" class="list-group-item" id="my_message">
+                <a href="javascript:void(0)" class="list-group-item" id="my_message">
                     <span class="badge">1</span>
                     <p>我的消息</p>
                 </a>
                 {% if user.user_is_admin %}
-                    <a href="#" class="list-group-item" id="manage_article">
+                    <a href="javascript:void(0)" class="list-group-item" id="manage_article">
                         <p>管理博文</p>
                     </a>
-                    <a href="#" class="list-group-item" id="manage_carousel">
+                    <a href="javascript:void(0)" class="list-group-item" id="manage_carousel">
                         <p>管理分类</p>
                     </a>
-                    <a href="#" class="list-group-item" id="manage_nav">
+                    <a href="javascript:void(0)" class="list-group-item" id="manage_nav">
                         <p>管理导航栏</p>
                     </a>
-                    <a href="#" class="list-group-item" id="manage_swiper">
+                    <a href="javascript:void(0)" class="list-group-item" id="manage_swiper">
                         <p>管理轮播图</p>
                     </a>
                 {% endif %}
                 {% if not user.user_is_admin %}
-                    <a href="#" class="list-group-item" id="apply_admin">
+                    <a href="javascript:void(0)" class="list-group-item" id="apply_admin">
                         <p>申请管理员</p>
                     </a>
                 {% endif %}
-                <a href="#" class="list-group-item" id="exit_system">
+                <a href="javascript:void(0)" class="list-group-item" id="exit_system">
                     <p>退出登录</p>
                 </a>
             </div>
@@ -81,12 +81,12 @@
             <div id="personal_center_content">
                 <div style="text-align: center">
                     <br/>
-                    <h1 style="font-size: 45px">欢迎,尊敬的的{{ uid }}</h1>
+                    <h1 style="font-size: 45px">欢迎,尊敬的{{ uid }}</h1>
                     <br/>
                     {% if imgUrl %}
-                        <img src="{{ imgUrl }}" alt="头像" class="img-circle"><br>
+                        <img src="{{ imgUrl }}" alt="头像" class="img-circle" width="100px"><br>
                     {% else %}
-                        <img src="{% static 'img/favicon.ico' %}" alt="头像" class="img-circle"><br>
+                        <img src="{% static 'img/favicon.ico' %}" alt="头像" class="img-circle" width="100px"> <br>
                     {% endif %}
                     <br/>
                     <h5>感谢您使用DjBlog博客系统</h5>

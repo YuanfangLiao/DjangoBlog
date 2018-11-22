@@ -11,6 +11,7 @@ STATUS = {
     0: u'正常',
     1: u'草稿',
     2: u'删除',
+    3: u'彻底删除'
 }
 
 
@@ -56,3 +57,10 @@ class BlogPostModel(models.Model):
         while ' ' in tags_list:
             tags_list.remove(' ')
         return tags_list
+
+
+# 轮播图
+class Swipers(models.Model):
+    swiper_img_url = models.TextField(max_length=100, null=False)
+    swiper_url = models.TextField(max_length=100, null=True)
+    swiper_title = models.TextField(max_length=100, null=True)

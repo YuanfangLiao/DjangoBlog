@@ -1,0 +1,194 @@
+<div style="padding: 20px 30px" id="main_nav_content">
+    <div class="btn-group" role="group" id="manage_group" aria-label="...">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp;添加导航
+        </button>
+    </div>
+
+    <hr/>
+    {% for nav in navs %}
+        <div style="float: right;font-size: 12px;margin-top: 0px;margin-right: 30px">
+            <a href="javascript:void(0)" class="edit_name">修改名称</a>&nbsp;|
+            <a href="javascript:void(0)" class="edit_url">修改url</a>&nbsp;|
+            <a href="javascript:void(0)" class="del_nav">删除</a>&nbsp;
+        </div>
+
+        <div class="article-list-item" style="font-size: 10px;color: #9d9d9d">
+            <h1 style="font-size:23px;color: #0f0f0f">{{ nav.name }}</h1>
+            <small>{% if nav.url %}
+                {{ nav.url }}
+            {% endif %}</small>
+            <hr/>
+        </div>
+        <input style="display: none" value="{{ nav.id }}" class="nav_id">
+    {% endfor %}
+
+
+
+    <!-- 弹出框 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">添加导航</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="carousel_name">导航名称</label>
+                    <input type="text" class="form-control" id="nav_name" placeholder="新导航名称">
+                    <br/>
+                    <label for="carousel_summary">导航url</label>
+                    <input type="text" class="form-control" id="nav_url" placeholder="新导航url">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="add_nav">添加导航</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    $(function () {
+        {# 载入成功后把active改为本页面 #}
+        $(".list-group-item").removeClass('active');
+        $('#manage_nav').addClass('active');
+    });
+
+    $('#add_nav').click(function () {
+        let nav_name = $('#nav_name').val();
+        let nav_url = $('#nav_url').val();
+
+        let data = {};
+        data['nav_name'] = nav_name;
+        data['nav_url'] = nav_url;
+        data['edit_method'] = 'add';
+        if (nav_name) {
+            $.ajax({
+                method: 'post',
+                url: '/blog/edit_nav',
+                type: 'json',
+                data: data,
+                success: function (data) {
+                    if (data['code'] == 200) {
+                        alert('添加成功');
+                        // 隐藏弹出框
+                        $('#myModal').modal('hide');
+                        $('.modal-backdrop').remove();
+                        $('#personal_center_content').load('/users/manage_nav')
+                    } else {
+                        alert('错误,错误代码：' + data['code'] + ':分类已经存在或服务器异常')
+                    }
+
+                },
+                error: function () {
+                    alert('ajax错误')
+                }
+
+            })
+        } else {
+            alert("标题不能为空");
+        }
+    });
+    $('.edit_name').click(function () {
+        // 渲染页面 先获取值
+        let old_val = $(this).parent().next().children('h1').text();
+        $(this).parent().next().children('h1').hide();
+        $(this).parent().children().hide();
+        $(this).parent().children().eq(0).after('<a href="javascript:void(0)" class="go_edited_name">保存</a>');
+        $(this).parent().children().eq(2).after('<a href="javascript:void(0)" class="go_exit_edited_name">取消</a>');
+
+        $(this).parent().next().prepend('<input type="text" class="edited_name" value="' + old_val + '"><br/>');
+    });
+
+    $('.edit_url').click(function () {
+        // 渲染页面 先获取值
+        let old_val = $(this).parent().next().children('small').text();
+        old_val = old_val.trim();
+        $(this).parent().next().children('small').hide();
+        $(this).parent().children().hide();
+        $(this).parent().children().eq(0).after('<a href="javascript:void(0)" class="go_edited_url">保存</a>');
+        $(this).parent().children().eq(2).after('<a href="javascript:void(0)" class="go_exit_edited_url">取消</a>');
+
+        $(this).parent().next().children().eq(1).after('<input type="text" class="edited_url" style="width:200px"' +
+            ' value="' + old_val + '"><br/>');
+    });
+    $('.del_nav').click(function () {
+        // 渲染页面 先获取值
+        let val = $(this).parent().next().next().val();
+        data = {};
+        data['id'] = val;
+        data['edit_method'] = 'del';
+        if (confirm('确认删除吗')) {
+            $.ajax({
+                method: 'post',
+                url: '/blog/edit_nav',
+                type: 'json',
+                data: data,
+                success: function (data) {
+                    if (data['code'] == 200) {
+                        alert('删除成功');
+                        // 隐藏弹出框
+                        $('#myModal').modal('hide');
+                        $('.modal-backdrop').remove();
+                        $('#personal_center_content').load('/users/manage_carousel')
+                    } else {
+                        alert('错误,错误代码：' + data['code'] + data['msg'])
+                    }
+
+                },
+                error: function (err, x, s) {
+                    alert('ajax错误', err)
+                }
+            })
+        }
+
+    });
+
+    $('#main_nav_content').on('click', '.go_exit_edited_name,.go_exit_edited_url', function () {
+        $('#personal_center_content').load('/users/manage_nav')
+    });
+
+    $('#main_nav_content').on('click', '.go_edited_name,.go_edited_url', function () {
+        let id = $(this).parent().next().next().val();
+        // console.log(old_title);
+        data = {};
+        data['id'] = id;
+        // 如果是修改简介，走修改简介的，否则相反
+        if ($(this).hasClass('go_edited_url')) {
+            data['edit_method'] = 'edit_url';
+            let new_url = $(this).parent().next().children('input').val();
+            data['new_url'] = new_url;
+        } else if ($(this).hasClass('go_edited_name')) {
+            data['edit_method'] = 'edit_name';
+            let new_name = $(this).parent().next().children('input').val();
+            data['new_name'] = new_name;
+        }
+        $.ajax({
+            method: 'post',
+            url: '/blog/edit_nav',
+            type: 'json',
+            data: data,
+            success: function (data) {
+                if (data['code'] == 200) {
+                    // 隐藏弹出框
+                    $('#myModal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    $('#personal_center_content').load('/users/manage_nav')
+                } else {
+                    alert('错误,错误代码：' + data['code'] + ':服务器异常')
+                }
+
+            },
+            error: function (err, x, s) {
+                alert('ajax错误', err)
+            }
+        })
+    });
+
+</script>

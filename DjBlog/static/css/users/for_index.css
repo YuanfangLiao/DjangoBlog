@@ -127,6 +127,10 @@ article[class=blog-post] {
     text-align: center;
 }
 
+#daohanglan li{
+    /*display: inline-block;*/
+    /*height: 10px;*/
+}
 .swiper-container {
     width: 100%;
     height: 600px;
