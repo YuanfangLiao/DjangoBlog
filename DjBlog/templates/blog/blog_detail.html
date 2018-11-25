@@ -51,17 +51,60 @@
                     {% endif %}
                 </td>
                 <td width="90%">
-                    <form style="display: inline; width: 100%" action="{% url 'society:add_comment_to_blog' %}" method="post">
+                    <form style="display: inline; width: 100%" action="{% url 'society:add_comment_to_blog' %}"
+                          method="post">
                         {% csrf_token %}
                         <textarea id="comment" name="comment" class="form-control" rows="5"
                                   placeholder="请输入评论 200以内！" style="width: 100%"></textarea>
                         <input type="text" style="display: none;" name="article_id" value="{{ blog.id }}">
+                        {# type=0 为对博客的回复，否则为对评论的回复 #}
+                        <input type="text" style="display: none;" id="post_type" name="post_type" value="0">
                         <br/>
                         <button type="submit" style="float: right" class="btn btn-danger">提交</button>
                     </form>
                 </td>
             </tr>
         </table>
+        <hr/>
+
+        {% for comment in comments %}
+            <table width="100%">
+                <tr>
+                    <td valign="top">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <img src="/static/upload/{{ comment.comment_creater.user_img }}" alt="头像" class="img-circle"
+                             width="30px"
+                             style="margin-top: 15px; display: inline"> <br>
+                    </td>
+                    <td width="90%">
+                        <a style="font-size: 18px;font-weight: bold">{{ comment.comment_creater.user_id }}</a>
+                        <br/>
+                        <p>&nbsp;</p>
+                        {% ifnotequal comment.comment_type 0 %}
+                            <div style="border: 1px dashed black;background-color:#e8f2ff;border-radius:5px;width: 90%">
+                                {% for com in comments %}
+                                    {% ifequal com.id comment.comment_to_which_Comment %}
+                                        <p>回复 {{ com.comment_creater_id }} 于 {{ com.comment_time }}发布的评论：</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ com.comment_detail }}</p>
+                                    {% endifequal %}
+                                {% endfor %}
+                            </div>
+                        {% endifnotequal %}
+                        <p>{{ comment.comment_detail }}</p>
+                        <p>{{ comment.comment_time }} <span><a class="comment_to_comment" href="#comment"
+                                                               name="{{ comment.comment_creater.user_id }},{{ comment.id }}">回复</a></span>
+                            {% if uid == comment.comment_creater_id %}
+                                <a href="{% url 'society:del_comment' comment.id %}"
+                                   name="{{ comment.id }}">删除</a>
+                            {% endif %}
+                        </p>
+
+                    </td>
+                </tr>
+            </table>
+            <hr/>
+        {% endfor %}
 
 
     </div>
@@ -83,4 +126,13 @@
 {% block extJs %}
     {{ block.super }}
     <script src="{% static 'plugins/editor-1.md-master/editormd.js' %}"></script>
+    <script>
+        $(".comment_to_comment").click(function () {
+            let username = $(this).attr('name').split(',')[0];
+            let commentid = $(this).attr('name').split(',')[1];
+            $('#post_type').attr('value', commentid);
+            $('#comment').val('回复' + username + ':')
+        });
+
+    </script>
 {% endblock %}

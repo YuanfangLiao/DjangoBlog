@@ -12,11 +12,11 @@ $(function () {
     });
 
     $('#my_comment').click(function () {
-        $('#personal_center_content').load('/users/go_user_center_somewhere/my_comment.html/')
+        $('#personal_center_content').load('/users/go_my_comment')
     });
 
     $('#my_message').click(function () {
-        $('#personal_center_content').load('/users/go_user_center_somewhere/my_message.html/')
+        $('#personal_center_content').load('/users/go_my_message')
     });
 
     $('#manage_article').click(function () {

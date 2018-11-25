@@ -144,6 +144,8 @@ STATICFILES_DIRS = [
     ("plugins", os.path.join(STATIC_ROOT, 'plugins').replace('\\', '/')),
     ("upload", os.path.join(STATIC_ROOT, 'upload').replace('\\', '/')),
     ("blogimg", os.path.join(STATIC_ROOT, 'upload/blogimg').replace('\\', '/')),
+    ("blogimg", os.path.join(STATIC_ROOT, 'upload/users').replace('\\', '/')),
+    ("blogimg", os.path.join(STATIC_ROOT, 'upload/carousels').replace('\\', '/')),
 ]
 
 # 文件上传路径

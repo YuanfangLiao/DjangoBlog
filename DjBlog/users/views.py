@@ -15,6 +15,7 @@ from django.urls import reverse
 
 from DjBlog import settings
 from blog.models import Nav, BlogPostModel, CarouselModel
+from society.models import Comment
 from users.functions import check_logined, get_uid
 from users.models import UserModel
 from users.sendEmail import EmailSender
@@ -192,10 +193,15 @@ def go_personal_center(request):
     uid = get_uid(request)
     user = get_User_Model(request)
     navs = Nav.objects.all()
+
+    all_my_posted_comments = Comment.objects.filter(comment_creater=user)
+    my_comments_num = Comment.objects.filter(comment_to_which_Comment__in=all_my_posted_comments).filter(
+        comment_is_not_read=1).count()
     data = {
         'uid': uid,
         'user': user,
-        'navs': navs
+        'navs': navs,
+        'my_comments_num':my_comments_num
     }
     if user.user_img:
         imgUrl = '/static/upload/' + user.user_img.url
@@ -378,6 +384,11 @@ def do_change_password(request):
 def go_my_comment(request):
     user = get_User_Model(request)
     data = {"user": user}
+    my_comments = Comment.objects.filter(comment_creater=user)
+    all_comments = Comment.objects.all()
+    print('111')
+    data['my_comments'] = my_comments
+    data['all_comments'] = all_comments
     return render(request, 'users/my_comment.html', context=data)
 
 
@@ -385,6 +396,12 @@ def go_my_comment(request):
 def go_my_message(request):
     user = get_User_Model(request)
     data = {"user": user}
+    # 这里要的是未读信息
+    all_my_posted_comments = Comment.objects.filter(comment_creater=user)
+    my_comments = Comment.objects.filter(comment_to_which_Comment__in=all_my_posted_comments)
+    all_comments = Comment.objects.all()
+    data['my_comments'] = my_comments
+    data['all_comments'] = all_comments
     return render(request, 'users/my_message.html', context=data)
 
 
@@ -424,7 +441,7 @@ def manage_nav(request):
     navs = Nav.objects.all().order_by('name')
     data = {}
     data['navs'] = navs
-    return render(request, 'users/manage_nav.html',context=data)
+    return render(request, 'users/manage_nav.html', context=data)
 
 
 @check_logined

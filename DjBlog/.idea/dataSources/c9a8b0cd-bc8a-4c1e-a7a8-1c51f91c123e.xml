@@ -1700,38 +1700,44 @@ model</ColNames>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="382" parent="245" name="comment_creater_id">
+    <column id="382" parent="245" name="comment_is_not_read">
       <Position>7</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="383" parent="245" name="comment_creater_id">
+      <Position>8</Position>
       <DataType>varchar(32)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="383" parent="245" name="comment_to_which_blog_id">
-      <Position>8</Position>
+    <column id="384" parent="245" name="comment_to_which_blog_id">
+      <Position>9</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="384" parent="245" name="society_comment_comment_creater_id_57df7cb0_fk_djblog_us">
+    <index id="385" parent="245" name="society_comment_comment_creater_id_57df7cb0_fk_djblog_us">
       <ColNames>comment_creater_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="385" parent="245" name="society_comment_comment_to_which_blo_71a669be_fk_blog_blog">
+    <index id="386" parent="245" name="society_comment_comment_to_which_blo_71a669be_fk_blog_blog">
       <ColNames>comment_to_which_blog_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="386" parent="245" name="PRIMARY">
+    <key id="387" parent="245" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="387" parent="245" name="society_comment_comment_creater_id_57df7cb0_fk_djblog_us">
+    <foreign-key id="388" parent="245" name="society_comment_comment_creater_id_57df7cb0_fk_djblog_us">
       <ColNames>comment_creater_id</ColNames>
       <RefSchemaName>DjBlog</RefSchemaName>
       <RefTableName>djblog_user</RefTableName>
       <RefColNames>user_id</RefColNames>
     </foreign-key>
-    <foreign-key id="388" parent="245" name="society_comment_comment_to_which_blo_71a669be_fk_blog_blog">
+    <foreign-key id="389" parent="245" name="society_comment_comment_to_which_blo_71a669be_fk_blog_blog">
       <ColNames>comment_to_which_blog_id</ColNames>
       <RefSchemaName>DjBlog</RefSchemaName>
       <RefTableName>blog_blogpostmodel</RefTableName>

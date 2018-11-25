@@ -10,7 +10,7 @@
             {% block left_content %}
                 {# 轮播图 #}
                 <br/>
-                <div class="swiper-container" id="lunbotu">
+                <div class="swiper-container faguangdediv" id="lunbotu">
                     <div class="swiper-wrapper">
                         {% for swiper in swipers %}
                             <div class="swiper-slide"><a {% if swiper.swiper_url %}href="{{ swiper.swiper_url }}"
@@ -52,75 +52,88 @@
                             <hr/>
                             <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
                             &nbsp;&nbsp;{% for tag in blog.tags.split %}&nbsp;&nbsp;<span>{{ tag }}</span>{% endfor %}
+                            <span style="float: right"><span class="glyphicon glyphicon-eye-open"
+                                                             aria-hidden="true"></span>&nbsp;{{ blog.view_times }}&nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>&nbsp;
+                                {{ blog.zan_times }}&nbsp;
+                            </span>
                         </div>
                     </article>
                 {% endfor %}
-                <div id="daohanglan">
-                    <nav aria-label="...">
-                        <ul class="pager">
-                            {% if blogs.has_previous %}
-                                <li class="previous"><a href="?page={{ blogs.previous_page_number }}"><span
-                                        aria-hidden="true">&larr;</span> Newer</a></li>
-                            {% else %}
-                                <li class="previous disabled"><a><span aria-hidden="true">&larr;</span> Newer</a></li>
-                            {% endif %}
-                            {#  <li>{{ now_page }}/{{ num_pages }}</li>#}
-                            {% for pg in blogs.paginator.page_range %}
+
+                {% if blogs.paginator.count > 1 %}
+                    <div id="daohanglan">
+                        <nav aria-label="...">
+                            <ul class="pager">
                                 {% if blogs.has_previous %}
-                                    {% ifequal pg blogs.previous_page_number %}
-                                        <li class=""><a href="?page={{ pg }}">{{ pg }} <span
-                                                class="sr-only">(current)</span></a>
-                                        </li>
-                                    {% endifequal %}
-                                {% endif %}
-
-                                {% ifequal pg blogs.number %}
-                                    <li class="active" style="background-color: #9d9d9d"><a
-                                            href="?page={{ pg }}">{{ pg }} <span
-                                            class="sr-only">(current)</span></a>
+                                    <li class="previous"><a href="?page={{ blogs.previous_page_number }}"><span
+                                            aria-hidden="true">&larr;</span> Newer</a></li>
+                                {% else %}
+                                    <li class="previous disabled"><a><span aria-hidden="true">&larr;</span> Newer</a>
                                     </li>
-                                {% endifequal %}
+                                {% endif %}
+                                {#  <li>{{ now_page }}/{{ num_pages }}</li>#}
+                                {% for pg in blogs.paginator.page_range %}
+                                    {% if blogs.has_previous %}
+                                        {% ifequal pg blogs.previous_page_number %}
+                                            <li class="zhongjian"><a href="?page={{ pg }}">{{ pg }} <span
+                                                    class="sr-only">(current)</span></a>
+                                            </li>
+                                        {% endifequal %}
+                                    {% endif %}
 
-                                {% if blogs.has_next %}
-                                    {% ifequal pg blogs.next_page_number %}
-                                        <li class=""><a href="?page={{ pg }}">{{ pg }} <span
+                                    {% ifequal pg blogs.number %}
+                                        <li class="active zhongjian" style="background-color: #9d9d9d"><a
+                                                href="?page={{ pg }}">{{ pg }} <span
                                                 class="sr-only">(current)</span></a>
                                         </li>
                                     {% endifequal %}
+
+                                    {% if blogs.has_next %}
+                                        {% ifequal pg blogs.next_page_number %}
+                                            <li class="zhongjian"><a href="?page={{ pg }}">{{ pg }} <span
+                                                    class="sr-only">(current)</span></a>
+                                            </li>
+                                        {% endifequal %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if blogs.has_next %}
+                                    <li class="next"><a href="?page={{ blogs.next_page_number }}">Older <span
+                                            aria-hidden="true">&rarr;</span></a>
+                                    </li>
+                                {% else %}
+                                    <li class="next disabled"><a>Older <span aria-hidden="true">&rarr;</span></a>
+                                    </li>
                                 {% endif %}
-                            {% endfor %}
-                            {% if blogs.has_next %}
-                                <li class="next"><a href="?page={{ blogs.next_page_number }}">Older <span
-                                        aria-hidden="true">&rarr;</span></a>
-                                </li>
-                            {% else %}
-                                <li class="next disabled"><a>Older <span aria-hidden="true">&rarr;</span></a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                </div>
+                            </ul>
+                        </nav>
+                    </div>
+                {% endif %}
             {% endblock %}
         </main>
 
         <aside class="col-md-4 sidebar">
             <div id="sousuodiv">
-                <div class="search bar3 yuanhudediv">
+                <div class="search bar3 yuanhudediv faguangdediv">
                     <form method="get" action="/blog/search/">
                         <input type="text" placeholder="站内搜索..." name="kw">
                         <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
                     </form>
                 </div>
             </div>
-            <div id="weather-div" class="yuanhudediv">
+            <div id="weather-div" class="yuanhudediv faguangdediv"
+                 style="text-align: center;overflow: hidden;background-color: #eee">
                 <br/>
                 <h1>天气预报</h1>
                 <br/>
-                <iframe width="350" scrolling="no" height="100" frameborder="0" allowtransparency="true"
-                        src="//i.tianqi.com/index.php?c=code&id=2&bgc=%23&bdc=%23&icon=2&num=2&site=14"></iframe>
+                <iframe id="fancybox-frame" name="fancybox-frame1542969982964" frameborder="0" scrolling="no" hspace="0"
+                        src="http://i.tianqi.com/index.php?c=code&a=getcode&id=35&h=55&w=200"
+                        style="margin-left: 40px"></iframe>
+                {#                <iframe width="350" scrolling="no" height="100" frameborder="0" allowtransparency="true"#}
+                {#                        src="//i.tianqi.com/index.php?c=code&id=2&bgc=%23&bdc=%23&icon=2&num=2&site=14"></iframe>#}
             </div>
             <br/>
-            <div id="my_biaoqianyun" class="yuanhudediv">
+            <div id="my_biaoqianyun" class="yuanhudediv faguangdediv" style="background-color: #eee">
                 <br/>
                 <h1 id="biaoqianyunwenzi">标签云</h1>
                 <div id="tagscloud">
@@ -135,7 +148,7 @@
                 <br/>
             </div>
             <br/>
-            <div class="list-group">
+            <div class="list-group faguangdediv" style="background-color: #eee">
                 <a href="#" class="list-group-item disabled" style="font-size: 15px">
                     文章分类
                 </a>
