@@ -14,7 +14,6 @@
     {{ block.super }}
     <script src="{% static 'js/users/for_personal_center.js' %}"></script>
     {# ajaxSubmit插件 #}
-
     <script src="{% static 'js/users/jquery.form.min.js' %}"></script>
     <script src="{% static 'js/users/jquery.Jcrop.min.js' %}"></script>
     <script src="{% static 'js/users/jquery.cookie.js' %}"></script>
@@ -50,7 +49,7 @@
                     <p>我的评论</p>
                 </a>
                 <a href="javascript:void(0)" class="list-group-item" id="my_message">
-                    <span class="badge">1</span>
+                    <span class="badge">{{ my_comments_num }}</span>
                     <p>我的消息</p>
                 </a>
                 {% if user.user_is_admin %}

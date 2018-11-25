@@ -12,11 +12,12 @@ def get_uid(request):
 
 # 判断有没有登陆的装饰器
 def check_logined(func):
-    def inner(request):
+    def inner(request, *args, **kwargs):
         uid = get_uid(request)
         if not uid:
             return redirect('/users/login_page/')
         else:
-            res = func(request)
+            res = func(request, *args, **kwargs)
             return res
+
     return inner

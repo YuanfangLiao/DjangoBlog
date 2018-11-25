@@ -29,6 +29,7 @@ class CarouselModel(models.Model):
     summary = models.TextField(blank=True, null=True, verbose_name=u'摘要')
     total_number = models.IntegerField(default=0, verbose_name=u'总数')
     create_time = models.DateTimeField(u'创建时间', auto_now_add=True)
+    img_url = models.TextField(default='/static/upload/carousels/django.png')
 
 
 # 博客文章表
@@ -54,6 +55,7 @@ class BlogPostModel(models.Model):
     def get_tags(self):
         self.tags.replace('\ ', ',')
         tags_list = self.tags.split(',')
+        tags_list = list(set(tags_list))
         while ' ' in tags_list:
             tags_list.remove(' ')
         return tags_list

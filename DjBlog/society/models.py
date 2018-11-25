@@ -25,3 +25,4 @@ class Comment(models.Model):
 
     comment_time = models.DateTimeField(auto_now=True)
     comment_zan_times = models.IntegerField(default=0)
+    comment_is_not_read = models.BooleanField(default=0)

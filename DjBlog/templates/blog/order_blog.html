@@ -1,0 +1,157 @@
+{% extends 'index.html' %}
+{% load static %}
+
+
+{% block left_content %}
+    <div id="paixufangshi" class="faguangdediv">
+        <div id="yonglaifangtitle">
+            <a href="{% url 'blog:order_blog' 'default' order_type %}" type="button"
+               class="xuanfenlei {% if require_type == 'default' %}
+            btn-danger{% else %}btn-warning
+            {% endif %} ">全部分类</a> &nbsp;
+            {% for carouse in carouses %}
+                <a href="{% url 'blog:order_blog' carouse.title order_type %}" type="button"
+                   class="xuanfenlei {% if require_type == carouse.title %}
+            btn-danger{% else %}btn-warning
+            {% endif %}">{{ carouse.title }}</a>
+                &nbsp;
+            {% endfor %}
+            <br/><br/>
+            <a href="{% url 'blog:order_blog' require_type 'time' %}" class="btn btn-xs {% if order_type == 'time' %}
+            doing {% endif %}">
+                时间排序 <span class="caret"></span>
+            </a>&nbsp;
+            <a href="{% url 'blog:order_blog' require_type 'zan' %}" class="btn btn-xs {% if order_type == 'zan' %}
+            doing {% endif %}">
+                点赞排序 <span class="caret"></span>
+            </a>&nbsp;
+            <a href="{% url 'blog:order_blog' require_type 'views' %}" class="btn btn-xs {% if order_type == 'views' %}
+            doing {% endif %}">
+                热度排序 <span class="caret"></span>
+            </a>&nbsp;
+
+        </div>
+
+    </div>
+    {% for blog in blogs %}
+        <article id="{{ blog.id }}" class="blog-post">
+            <div class="post-head">
+                <h1 class="post-title"><a href="{% url 'blog:blog_detail' blog.id %}">{{ blog.title }}</a>
+                </h1>
+                <div class="post-meta">
+                    <span class="author">作者：<a href="#">{{ blog.author_id }}</a></span> •
+                    <time class="post-date" datetime="2018年5月17日星期四凌晨3点41分" title="2018年5月17日星期四凌晨3点41分">
+                        <span class="glyphicon glyphicon-calendar"></span> {{ blog.create_time|date:"Y-m-d" }}
+                    </time>
+                    •
+                    <span class="carousel">分类：<a href="#">{{ blog.carousel_id }}</a></span>
+                </div>
+            </div>
+            <div class="post-content">
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ blog.summary }} ......</p>
+            </div>
+            <div class="post-permalink">
+                <a href="{% url 'blog:blog_detail' blog.id %}" class="btn btn-default">阅读全文</a>
+            </div>
+            <div class="post-footer">
+                <hr/>
+                <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                &nbsp;&nbsp;{% for tag in blog.tags.split %}&nbsp;&nbsp;<span>{{ tag }}</span>{% endfor %}
+                <span style="float: right"><span class="glyphicon glyphicon-eye-open"
+                                                 aria-hidden="true"></span>&nbsp;{{ blog.view_times }}&nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>&nbsp;
+                                {{ blog.zan_times }}&nbsp;
+                            </span>
+            </div>
+        </article>
+    {% endfor %}
+    {#  如果没有博客  #}
+    {% if not blogs %}
+        <article class="blog-post" style="text-align: center">
+            <br/>
+            <h1>该分类下还没有博客呢，要不<a href="{% url 'blog:post_new_blog' %}">创建一篇新博客</a>吧</h1>
+            <br/>
+        </article>
+    {% endif %}
+
+    {% if blogs.paginator.count > 1 %}
+        <div id="daohanglan">
+            <nav aria-label="...">
+                <ul class="pager">
+                    {% if blogs.has_previous %}
+                        <li class="previous"><a href="?page={{ blogs.previous_page_number }}"><span
+                                aria-hidden="true">&larr;</span> Newer</a></li>
+                    {% else %}
+                        <li class="previous disabled"><a><span aria-hidden="true">&larr;</span> Newer</a></li>
+                    {% endif %}
+                    {#  <li>{{ now_page }}/{{ num_pages }}</li>#}
+                    {% for pg in blogs.paginator.page_range %}
+                        {% if blogs.has_previous %}
+                            {% ifequal pg blogs.previous_page_number %}
+                                <li class="zhongjian"><a href="?page={{ pg }}">{{ pg }} <span
+                                        class="sr-only">(current)</span></a>
+                                </li>
+                            {% endifequal %}
+                        {% endif %}
+
+                        {% ifequal pg blogs.number %}
+                            <li class="active zhongjian" style="background-color: #9d9d9d"><a
+                                    href="?page={{ pg }}">{{ pg }} <span
+                                    class="sr-only">(current)</span></a>
+                            </li>
+                        {% endifequal %}
+
+                        {% if blogs.has_next %}
+                            {% ifequal pg blogs.next_page_number %}
+                                <li class="zhongjian"><a href="?page={{ pg }}">{{ pg }} <span
+                                        class="sr-only">(current)</span></a>
+                                </li>
+                            {% endifequal %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if blogs.has_next %}
+                        <li class="next"><a href="?page={{ blogs.next_page_number }}">Older <span
+                                aria-hidden="true">&rarr;</span></a>
+                        </li>
+                    {% else %}
+                        <li class="next disabled"><a>Older <span aria-hidden="true">&rarr;</span></a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block extCss %}
+    {{ block.super }}
+    <style>
+        #paixufangshi {
+            width: 100%;
+            padding-top: 25px;
+            padding-bottom: 25px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            background-color: white;
+        }
+
+        .xuanfenlei {
+            display: inline-block;
+            border-radius: 5px;
+            font-size: 12px;
+            padding: 2px 6px;
+        }
+
+        #yonglaifangtitle {
+            width: 100%;
+            height: 100%;
+            padding-left: 40px;
+        }
+
+        .doing {
+            color: #1C005A;
+        }
+
+    </style>
+{% endblock %}
