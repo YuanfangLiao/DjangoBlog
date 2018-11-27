@@ -14,9 +14,11 @@ urlpatterns = [
     path('test', views.test, name='test'),
     path('edit_carousel', views.edit_carousel, name='edit_carousel'),
     path('edit_nav', views.edit_nav, name='edit_nav'),
+    path('aboutme', views.aboutme, name='aboutme'),
     re_path(r'^edit_blog/', views.edit_blog, name='edit_blog'),
     re_path(r'^search/', views.search, name='search'),
 
-    path('blog_detail/<int:blog_id>', views.blog_detail, name='blog_detail')
+    path('blog_detail/<int:blog_id>', views.blog_detail, name='blog_detail'),
+    path('order_blog/<require_type>/<order_type>', views.order_blog, name='order_blog')
 
 ]

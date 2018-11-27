@@ -32,7 +32,6 @@ urlpatterns = [
     path('do_change_sex/', views.do_change_sex, name='do_change_sex'),
 
     path('go_my_comment/', views.go_my_comment, name='go_my_comment'),
-
     path('go_my_message/', views.go_my_message, name='go_my_message'),
     # 发送邮箱验证码
     path('do_send_email_verification_code/', views.do_send_email_verification_code,

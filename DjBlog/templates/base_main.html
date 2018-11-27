@@ -39,9 +39,15 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="margin-left: 180px">
                 <ul class="nav navbar-nav" id="my_nav_bar">
-                    <li class="active"><a href="{% url 'blog:index' %}"><span class="glyphicon glyphicon-home"
-                                                                              aria-hidden="true"></span>
+                    <li {% if which_page == 'index' %} class="active"
+                    {% endif %}><a href="{% url 'blog:index' %}"><span class="glyphicon glyphicon-home"
+                                                                       aria-hidden="true"></span>
                         主页 <span class="sr-only">(current)</span></a></li>
+                    <li{% if which_page == 'all_blog' %} class="active"
+                    {% endif %}><a href="{% url 'blog:order_blog' 'default' 'default' %}"><span
+                            class="glyphicon glyphicon-zoom-in"
+                            aria-hidden="true"></span>
+                        全部博客 <span class="sr-only">(current)</span></a></li>
 
                     {# 这里判断导航栏有几个分类 大于三个展开下拉菜单 #}
                     {% if navs %}
@@ -124,6 +130,10 @@
                     <span><a href="#">By Gople</a></span> |
                     <span>基于<a href="https://v3.bootcss.com/" target="_blank">Bootstrap3</a>
                         <a href="https://www.djangoproject.com/" target="_blank">Django2</a></span>
+                    <p>
+                        <a href="http://www.miitbeian.gov.cn/"><img src="/static/img/jinhui.png"
+                                                                    width="15px" style="margin-bottom: 3px"/>
+                            浙ICP备18051042号</a></p>
                 </div>
             </div>
         </div>

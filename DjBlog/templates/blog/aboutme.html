@@ -1,0 +1,69 @@
+{% extends 'base_main.html' %}
+{% load static %}
+
+{% block content_detail %}
+
+    <div id="aboutme_main_div">
+        <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关于我</h1>
+        <hr/>
+        <br/>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我叫廖元方，大家都叫我元方，青岛大学，杭州人，97年。</p>
+        <br/>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个非常平凡的人，一直喜欢的是数码产品，从最早的Nokia的Symbian开始，
+            就喜欢折腾些手机固件啥的，一玩眼睛一晃就到了大学了，
+            再一晃又快毕业了，眼看大学四年过去，乱七八糟的课学了一堆，对于一些专业性的知识，都只是略懂。一看除了几个学期项目，也没做过什么像样的作品，
+            正好最近又在学python，于是就把学到的东西实践一下，做一个自己的博客出来，以后在上面发发牢骚也好，记录一下学习也好。现成的博客像WordPress
+            之类的有很多，为什么还选择做博客呢，哈哈，那当然是自己做的有意思啦。
+        </p>
+        <br/>
+        <h3>&nbsp;&nbsp;&nbsp;&nbsp;我喜欢的</h3>
+        <br/>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;作为一个在杭州长大的孩纸，对杭州的感情是最深的，有些杭州人总是说，西湖有什么好的，
+            不就是一个湖嘛，没什么好玩的，但要是真的让他换一个地方生活，又离不开西湖了，西湖一定会是每个在杭州生活过的人心中必不可少的一部分。
+            我也一样，我最爱的地方一定是西湖，每次心情不好的时候，去西湖边逛两圈，总会给我不一样的灵感。</p>
+        <br/>
+        <div class="row">
+            <div class="col-md-6"><img src="/static/img/chun.jpg" class="img-rounded" width="100%"></div>
+            <div class="col-md-6"><img src="/static/img/xia.jpg" class="img-rounded" width="100%"></div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-md-6"><img src="/static/img/qiu.jpg" class="img-rounded" width="100%"></div>
+            <div class="col-md-6"><img src="/static/img/dong.jpg" class="img-rounded" width="100%"></div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-md-6"><br/>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    西湖的春夏秋冬，给我带来了不一样的东西，每年的每个季节，不管怎么样，我都会去一次，同一个角度
+                    每次去都是不一样的美。</p></div>
+            <div class="col-md-6"><img src="/static/img/dong1.jpg" class="img-rounded" width="100%"></div>
+
+        </div>
+        <br/><br/>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            另外还有好多话想写，今天不早了，以后有的是时间～有什么想说的都会在这个栏目写一下（反正也没人看），哈哈</p>
+        <br/>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个博客系统是从9月底开始做的，到现在差不多有两个月的时间，
+            都是在空余的时间，想到什么就写点什么，这样慢慢做起来的，还有很多功能没有完善，
+            我在后期会慢慢完善的～</p>
+        <br/>
+    </div>
+
+{% endblock %}
+
+{% block extCss %}
+    {{ block.super }}
+    <style>
+        #aboutme_main_div {
+            width: 100%;
+            box-shadow: 0px 0px 10px #222;
+            border-radius: 10px;
+            background-color: white;
+            overflow: hidden;
+            text-align: left;
+            padding: 50px;
+        }
+
+    </style>
+{% endblock %}

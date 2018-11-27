@@ -12,7 +12,7 @@ article[class=blog-post] {
     margin: 20px auto 5px;
     padding: 10px;
     background-color: white;
-    box-shadow: #cb4b16 0 0 5px;
+    box-shadow: 0px 0px 10px #222;
     width: 100%;
     overflow: hidden;
 
@@ -66,7 +66,7 @@ article[class=blog-post] {
 }
 
 .btn-default:hover {
-    background-color: #0f0f0f;
+    background-color: #cb4b16;
     color: white;
 }
 
@@ -112,9 +112,8 @@ article[class=blog-post] {
     text-align: center;
     vertical-align: center;
     border-radius: 15px;
-    background-color: white;
     margin-top: 30px;
-    padding-top: 10px;
+    height: 180px;
     /*box-shadow: #cb4b16 0 0 5px;*/
 }
 
@@ -127,10 +126,11 @@ article[class=blog-post] {
     text-align: center;
 }
 
-#daohanglan li{
+#daohanglan li {
     /*display: inline-block;*/
     /*height: 10px;*/
 }
+
 .swiper-container {
     width: 100%;
     height: 600px;
@@ -149,14 +149,18 @@ article[class=blog-post] {
 }
 
 .faguangdediv {
-    box-shadow: #cb4b16 0 0 5px;
+    box-shadow: 0px 0px 10px #222;
     border-radius: 10px;
+    background-color: white;
     overflow: hidden;
 }
+
 .yuanhudediv {
     border-radius: 10px;
     overflow: hidden;
+    background-color: #eee;
 }
+
 /*搜索框*/
 #sousuodiv {
     width: 100%;
@@ -194,7 +198,7 @@ article[class=blog-post] {
 }
 
 #sousuodiv .bar3 {
-    background: #F9F0DA;
+    background: #eee;
 }
 
 #sousuodiv .bar3 form {
@@ -202,7 +206,7 @@ article[class=blog-post] {
     border: 1px solid black;
 }
 
-#sousuodiv .bar3 input,#sousuodiv  .bar3 button {
+#sousuodiv .bar3 input, #sousuodiv .bar3 button {
     background: transparent;
 }
 
@@ -215,4 +219,32 @@ article[class=blog-post] {
     font-family: FontAwesome;
     font-size: 16px;
     color: #F9F0DA;
+}
+
+/*前进后退按钮*/
+.pager li[class~=previous] a, .pager li[class~=next] a {
+    background-color: #eee;
+    width: 90px;
+    height: 28px;
+    font-size: 12px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 4px #222;
+    border: 0;
+}
+
+.pager li[class~=zhongjian] a {
+    background-color: #eee;
+    width: 37px;
+    height: 28px;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0px 0px 4px #222;
+    border: 0;
+}
+
+.pager li[class=previous] a:hover, .pager li[class=next] a:hover,
+.pager li[class~=zhongjian] a:hover {
+    background-color: #9d9d9d;
+    color: #0f0f0f;
 }

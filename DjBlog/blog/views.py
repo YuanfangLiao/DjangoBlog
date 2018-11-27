@@ -13,9 +13,10 @@ from django.shortcuts import render, get_object_or_404
 # 加载主页
 from DjBlog import settings
 from blog.models import CarouselModel, BlogPostModel, Nav, Swipers
-from users.functions import check_logined, get_uid
+from society.models import Comment
+from users.functions import check_logined, get_uid, only_admin_go, get_biyaode_dict
 from users.models import UserModel
-from users.views import get_User_Model
+from users.functions import get_User_Model
 
 
 def index(request):
@@ -35,6 +36,8 @@ def index(request):
     tags = []
     for blog in all_blogs:
         tags += blog.get_tags()
+    # 去重
+    tags = list(set(tags))
     navs = Nav.objects.all()
     paginator = Paginator(all_blogs, 6)
     page = request.GET.get('page')
@@ -60,9 +63,70 @@ def index(request):
     data['tags'] = tags
     data['now_page'] = now_page
     data['num_pages'] = paginator.num_pages
+    data['which_page'] = 'index'
 
     response = render(request, 'index.html', data)
     return response
+
+
+# 通过不同分类方式展现博客
+def order_blog(request, require_type, order_type):
+    sessionid = request.COOKIES.get('sessionid')
+
+    if request.session.session_key == sessionid:
+        uid = request.session.get('user_id')
+        user = UserModel.objects.filter(user_id=uid).first()
+        data = {'uid': uid, 'user': user}
+
+    else:
+        data = {'uid': None}
+
+    # 博客分类信息，按个数排名 文章信息，导航栏信息
+    carouses = CarouselModel.objects.all().order_by('-total_number')
+    exactly_all_blogs = BlogPostModel.objects.all().filter(status=0)
+    if require_type == 'default':
+        all_blogs = BlogPostModel.objects.all().filter(status=0)
+    else:
+        all_blogs = BlogPostModel.objects.all().filter(status=0).filter(carousel_id=require_type)
+
+    if order_type == 'zan':
+        all_blogs.order_by('-zan_times')
+    elif order_type == 'time':
+        all_blogs.order_by('-create_time')
+    elif order_type == 'views':
+        all_blogs.order_by('-view_times')
+    else:
+        all_blogs.order_by('-create_time')
+
+    tags = []
+    for blog in exactly_all_blogs:
+        tags += blog.get_tags()
+    # 去重
+    tags = list(set(tags))
+    navs = Nav.objects.all()
+    paginator = Paginator(all_blogs, 5)
+    page = request.GET.get('page')
+    try:
+        blogs = paginator.page(page)
+        now_page = page
+    except PageNotAnInteger:
+        blogs = paginator.page(1)
+        now_page = 1
+    except EmptyPage:
+        blogs = paginator.page(paginator.num_pages)
+        now_page = paginator.num_pages
+
+    data['carouses'] = carouses
+    data['blogs'] = blogs
+    data['navs'] = navs
+    data['tags'] = tags
+    data['now_page'] = now_page
+    data['num_pages'] = paginator.num_pages
+    data['require_type'] = require_type
+    data['order_type'] = order_type
+    data['which_page'] = 'all_blog'
+
+    return render(request, 'blog/order_blog.html', data)
 
 
 def blog_detail(request, blog_id):
@@ -74,8 +138,13 @@ def blog_detail(request, blog_id):
         blog = BlogPostModel.objects.all().filter(pk=blog_id).first()
         blog.view_times = blog.view_times + 1
         blog.save()
+
+        # 加载博客评论
+        comments = Comment.objects.filter(comment_to_which_blog=blog).order_by('comment_time')
+
         data = {}
         tags = blog.get_tags()
+        data['comments'] = comments
         data['navs'] = navs
         data['blog'] = blog
         data['user'] = user
@@ -100,6 +169,7 @@ def blog_detail(request, blog_id):
         return render(request, 'blog/blog_detail.html', context=data)
 
 
+@only_admin_go
 @check_logined
 def post_new_blog(request):
     # 获取所有分类数据
@@ -116,6 +186,7 @@ def post_new_blog(request):
     return render(request, 'blog/post_new_blog.html', context=data)
 
 
+@only_admin_go
 @check_logined
 def edit_blog(request):
     if request.method == "GET":
@@ -154,6 +225,7 @@ def del_blog(request):
 
 
 # 恢复博客
+@only_admin_go
 @check_logined
 def recovery_blog(request):
     if request.method == "POST":
@@ -168,6 +240,7 @@ def recovery_blog(request):
 
 
 # 发布博文
+@only_admin_go
 @check_logined
 def do_post_new_blog(request):
     if request.method == "POST":
@@ -246,6 +319,7 @@ def do_post_new_blog(request):
 
 
 # 写博客上传图片
+@only_admin_go
 @check_logined
 def blog_img_upload(request):
     if request.method == "POST":
@@ -315,6 +389,18 @@ def search(request):
             navs = Nav.objects.all()
             data = {'uid': uid, 'navs': navs, 'kw': kw}
             if blogs:
+                # 分页操作暂缓开放
+                # paginator = Paginator(blogs, 6)
+                # page = request.GET.get('page')
+                # try:
+                #     blogs = paginator.page(page)
+                #     now_page = page
+                # except PageNotAnInteger:
+                #     blogs = paginator.page(1)
+                #     now_page = 1
+                # except EmptyPage:
+                #     blogs = paginator.page(paginator.num_pages)
+                #     now_page = paginator.num_pages
                 data['blogs'] = blogs
             return render(request, 'blog/search_article.html', context=data)
         else:
@@ -451,3 +537,9 @@ def edit_nav(request):
             except Exception as e:
                 print(e)
                 return JsonResponse({'code': 500})
+
+
+def aboutme(request):
+    data = get_biyaode_dict(request)
+
+    return render(request, 'blog/aboutme.html', data)

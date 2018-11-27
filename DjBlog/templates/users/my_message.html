@@ -1,9 +1,175 @@
-消息社区正在建设中……敬请期待
+<div id="my_comment_div_content" style="padding: 20px 30px">
 
+    <div class="btn-group" role="group" id="manage_group" aria-label="...">
+        <button type="button" id="not_read" class="btn btn-default active">未读</button>
+        <button type="button" id="read" class="btn btn-default">已读</button>
+    </div>
+    <hr/>
+    {% for comment in my_comments %}
+        <div class="not_read_div">
+            {% if comment.comment_is_not_read == 1 %}
+
+                <a style="font-size: 18px;font-weight: bold" href="
+                {% url 'blog:blog_detail'  comment.comment_to_which_blog_id %}">评论于博文：{{ comment.comment_to_which_blog.title }}</a>
+                <div style="margin-left: 20px">
+                    <p>时间:{{ comment.comment_time }}</p>
+                    <div style="margin-left: 20px">
+                        {% ifnotequal comment.comment_type 0 %}
+                            <div style="border: 1px dashed black;background-color:#e8f2ff;border-radius:5px;width: 90%">
+                                {% for com in all_comments %}
+                                    {% ifequal com.id comment.comment_to_which_Comment %}
+                                        <p>回复 {{ com.comment_creater_id }} 于 {{ com.comment_time }}发布的评论：</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ com.comment_detail }}</p>
+                                    {% endifequal %}
+                                {% endfor %}
+                            </div>
+                        {% endifnotequal %}
+                        <p>{{ comment.comment_detail }}</p>
+                        <p style="float: right">
+                            <a href="javascript:void(0)" class="ajax_yidu"
+                               name="{{ comment.id }}">标为已读</a>|
+                            <a href="javascript:void(0)" class="ajax_del"
+                               name="{{ comment.id }}">删除</a>
+                        </p>
+
+                    </div>
+                </div>
+                <hr/>
+            {% endif %}
+        </div>
+        <div class="read_div" style="display: none">
+            {% if comment.comment_is_not_read == 0 %}
+                <a style="font-size: 18px;font-weight: bold" href="
+                {% url 'blog:blog_detail'  comment.comment_to_which_blog_id %}">评论于博文：{{ comment.comment_to_which_blog.title }}</a>
+                <div style="margin-left: 20px">
+                    <p>时间:{{ comment.comment_time }}</p>
+                    <div style="margin-left: 20px">
+                        {% ifnotequal comment.comment_type 0 %}
+                            <div style="border: 1px dashed black;background-color:#e8f2ff;border-radius:5px;width: 90%">
+                                {% for com in all_comments %}
+                                    {% ifequal com.id comment.comment_to_which_Comment %}
+                                        <p>回复 {{ com.comment_creater_id }} 于 {{ com.comment_time }}发布的评论：</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ com.comment_detail }}</p>
+                                    {% endifequal %}
+                                {% endfor %}
+                            </div>
+                        {% endifnotequal %}
+                        <p>{{ comment.comment_detail }}</p>
+                        <p style="float: right">
+                            <a href="javascript:void(0)" class="ajax_weidu"
+                               name="{{ comment.id }}">标为未读</a>|
+                            <a href="javascript:void(0)" class="ajax_del"
+                               name="{{ comment.id }}">删除</a>
+                        </p>
+
+                    </div>
+                </div>
+                <hr/>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+<style>
+    #my_comment_div_content {
+        font-size: 12px;
+    }
+</style>
 <script>
     $(function () {
         {# 载入成功后把active改为本页面 #}
         $(".list-group-item").removeClass('active');
         $('#my_message').addClass('active');
+
+        $('.ajax_del').click(function () {
+            let comment_id = $(this).attr('name');
+            data1 = {};
+            data1['comment_id'] = comment_id;
+            if (confirm('确认要删除吗')) {
+                $.ajax({
+                    url: '/society/ajax_del_comment',
+                    type: 'post',
+                    data: data1,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data['code'] == 200) {
+                            $('#personal_center_content').load('/users/go_my_comment')
+                        } else {
+                            alert('错误,错误代码：' + data['code'])
+                        }
+                    },
+                    error: function () {
+                        alert('ajax错误')
+                    }
+                })
+            }
+        });
+
+        $('.ajax_yidu').click(function () {
+            let comment_id = $(this).attr('name');
+            data1 = {};
+            data1['comment_id'] = comment_id;
+            $.ajax({
+                url: '/society/ajax_yidu_comment',
+                type: 'post',
+                data: data1,
+                dataType: 'json',
+                success: function (data) {
+                    if (data['code'] == 200) {
+                        let old_val = $('#my_message span').html();
+                        let new_val = parseInt(old_val) - 1;
+                        console.log(old_val)
+                        $('#my_message span').text('' + new_val);
+                        $('#personal_center_content').load('/users/go_my_message');
+
+                    } else {
+                        alert('错误,错误代码：' + data['code'])
+                    }
+                },
+                error: function () {
+                    alert('ajax错误')
+                }
+            })
+        });
+
+        $('.ajax_weidu').click(function () {
+            let comment_id = $(this).attr('name');
+            data1 = {};
+            data1['comment_id'] = comment_id;
+            $.ajax({
+                url: '/society/ajax_weidu_comment',
+                type: 'post',
+                data: data1,
+                dataType: 'json',
+                success: function (data) {
+                    if (data['code'] == 200) {
+                        let old_val = $('#my_message span').html();
+                        let new_val = parseInt(old_val) + 1;
+                        $('#my_message span').text('' + new_val);
+                        $('#personal_center_content').load('/users/go_my_message');
+
+                    } else {
+                        alert('错误,错误代码：' + data['code'])
+                    }
+                },
+                error: function () {
+                    alert('ajax错误')
+                }
+            })
+        });
+
+
+        $('#read').click(function () {
+            $('#not_read').removeClass('active');
+            $('#read').addClass('active');
+            $('.not_read_div').css('display', 'none');
+            $('.read_div').css('display', 'block')
+        });
+        $('#not_read').click(function () {
+            $('#read').removeClass('active');
+            $('#not_read').addClass('active');
+            $('.read_div').css('display', 'none');
+            $('.not_read_div').css('display', 'block')
+        })
     })
 </script>
