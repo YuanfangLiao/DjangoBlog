@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2wkpsk_@xes&+vz#ww_^f+2&la78*72%41h!^o9y)4d7cgbeza'
+# SECRET_KEY = 'sadlfkjlasfjl;sdjfl;ajsfljasldfjsdalfjlxjvlcvjl;af'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'DjBlog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DjBlog',
-        'USER': 'gople',
-        'PASSWORD': '12345678',
-        'HOST': '47.101.39.17',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': 'localhost',
         'PORT': 3306,
     }
 }
@@ -144,6 +144,8 @@ STATICFILES_DIRS = [
     ("plugins", os.path.join(STATIC_ROOT, 'plugins').replace('\\', '/')),
     ("upload", os.path.join(STATIC_ROOT, 'upload').replace('\\', '/')),
     ("blogimg", os.path.join(STATIC_ROOT, 'upload/blogimg').replace('\\', '/')),
+    ("blogimg", os.path.join(STATIC_ROOT, 'upload/users').replace('\\', '/')),
+    ("blogimg", os.path.join(STATIC_ROOT, 'upload/carousels').replace('\\', '/')),
 ]
 
 # 文件上传路径
@@ -159,8 +161,8 @@ STATICFILES_FINDERS = (
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.163.com'  # 如果是 163 改成 smtp.163.com
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'djblog_admin@163.com'  # 帐号
-EMAIL_HOST_PASSWORD = 'Qazwsxedc1'  # 密码
+EMAIL_HOST_USER = ''  # 帐号
+EMAIL_HOST_PASSWORD = ''  # 密码
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
