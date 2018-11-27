@@ -7,7 +7,7 @@ from django.urls import reverse
 import blog
 from society.models import Comment
 from users.functions import check_logined
-from users.views import get_User_Model
+from users.functions import get_User_Model
 
 
 @check_logined
