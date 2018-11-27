@@ -69,12 +69,12 @@
     {% if not blogs %}
         <article class="blog-post" style="text-align: center">
             <br/>
-            <h1>该分类下还没有博客呢，要不<a href="{% url 'blog:post_new_blog' %}">创建一篇新博客</a>吧</h1>
+            <h3>该分类下还没有博客呢，要不<a href="{% url 'blog:post_new_blog' %}">创建一篇新博客</a>吧</h3>
             <br/>
         </article>
     {% endif %}
 
-    {% if blogs.paginator.count > 1 %}
+    {% if blogs.paginator.num_pages > 1 %}
         <div id="daohanglan">
             <nav aria-label="...">
                 <ul class="pager">

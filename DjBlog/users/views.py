@@ -16,11 +16,26 @@ from django.urls import reverse
 from DjBlog import settings
 from blog.models import Nav, BlogPostModel, CarouselModel
 from society.models import Comment
-from users.functions import check_logined, get_uid
+from users.functions import get_uid, check_logined, get_biyaode_dict, get_User_Model
 from users.models import UserModel
 from users.sendEmail import EmailSender
 
 logger = logging.getLogger(__name__)
+
+
+def permission_denied(request):
+    data = get_biyaode_dict(request)
+    return render(request, '403.html', context=data)
+
+
+def page_not_found(request):
+    data = get_biyaode_dict(request)
+    return render(request, '404.html', context=data)
+
+
+def page_error(request):
+    data = get_biyaode_dict(request)
+    return render(request, '500.html', context=data)
 
 
 # 去注册界面
@@ -201,7 +216,7 @@ def go_personal_center(request):
         'uid': uid,
         'user': user,
         'navs': navs,
-        'my_comments_num':my_comments_num
+        'my_comments_num': my_comments_num
     }
     if user.user_img:
         imgUrl = '/static/upload/' + user.user_img.url
@@ -217,16 +232,6 @@ def do_log_out(request):
     request.session.flush()
 
     return response
-
-
-# 获取用户对象
-def get_User_Model(request):
-    session_id = request.COOKIES.get('sessionid')
-    if request.session.session_key == session_id:
-        uid = request.session.get('user_id')
-        User = UserModel.objects.all().filter(user_id=uid).first()
-        return User
-    return None
 
 
 # 用于管理用户中心中去到不同页面

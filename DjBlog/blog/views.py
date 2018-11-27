@@ -14,9 +14,9 @@ from django.shortcuts import render, get_object_or_404
 from DjBlog import settings
 from blog.models import CarouselModel, BlogPostModel, Nav, Swipers
 from society.models import Comment
-from users.functions import check_logined, get_uid
+from users.functions import check_logined, get_uid, only_admin_go, get_biyaode_dict
 from users.models import UserModel
-from users.views import get_User_Model
+from users.functions import get_User_Model
 
 
 def index(request):
@@ -83,11 +83,11 @@ def order_blog(request, require_type, order_type):
 
     # 博客分类信息，按个数排名 文章信息，导航栏信息
     carouses = CarouselModel.objects.all().order_by('-total_number')
-    exactly_all_blogs = BlogPostModel.objects.filter(status=0)
+    exactly_all_blogs = BlogPostModel.objects.all().filter(status=0)
     if require_type == 'default':
-        all_blogs = BlogPostModel.objects.filter(status=0)
+        all_blogs = BlogPostModel.objects.all().filter(status=0)
     else:
-        all_blogs = BlogPostModel.objects.filter(status=0).filter(carousel_id=require_type)
+        all_blogs = BlogPostModel.objects.all().filter(status=0).filter(carousel_id=require_type)
 
     if order_type == 'zan':
         all_blogs.order_by('-zan_times')
@@ -169,6 +169,7 @@ def blog_detail(request, blog_id):
         return render(request, 'blog/blog_detail.html', context=data)
 
 
+@only_admin_go
 @check_logined
 def post_new_blog(request):
     # 获取所有分类数据
@@ -185,6 +186,7 @@ def post_new_blog(request):
     return render(request, 'blog/post_new_blog.html', context=data)
 
 
+@only_admin_go
 @check_logined
 def edit_blog(request):
     if request.method == "GET":
@@ -223,6 +225,7 @@ def del_blog(request):
 
 
 # 恢复博客
+@only_admin_go
 @check_logined
 def recovery_blog(request):
     if request.method == "POST":
@@ -237,6 +240,7 @@ def recovery_blog(request):
 
 
 # 发布博文
+@only_admin_go
 @check_logined
 def do_post_new_blog(request):
     if request.method == "POST":
@@ -315,6 +319,7 @@ def do_post_new_blog(request):
 
 
 # 写博客上传图片
+@only_admin_go
 @check_logined
 def blog_img_upload(request):
     if request.method == "POST":
@@ -532,3 +537,9 @@ def edit_nav(request):
             except Exception as e:
                 print(e)
                 return JsonResponse({'code': 500})
+
+
+def aboutme(request):
+    data = get_biyaode_dict(request)
+
+    return render(request, 'blog/aboutme.html', data)

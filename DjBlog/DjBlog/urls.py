@@ -1,4 +1,4 @@
-from django.conf.urls import url, handler404,handler500
+from django.conf.urls import url, handler404, handler500, handler403
 # from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
@@ -9,7 +9,11 @@ from DjBlog import settings
 from blog import urls as blog_url
 from users import urls as users_url
 from society import urls as society_url
+from users.views import page_not_found, page_error, permission_denied
 
+handler403 = permission_denied
+handler404 = page_not_found
+handler500 = page_error
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,4 +27,3 @@ urlpatterns = [
         {'document_root': settings.STATIC_ROOT}, name='static'),
 
 ]
-
