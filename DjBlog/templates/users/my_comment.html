@@ -1,6 +1,10 @@
 <div id="my_comment_div_content" style="padding: 20px 30px;">
-    {% for comment in my_comments %}
 
+    {% if not my_comments %}
+        <h3>你还没有评论哟！去发表一个评论再来吧～</h3>
+    {% endif %}
+
+    {% for comment in my_comments %}
         <a style="font-size: 18px;font-weight: bold" href="
                 {% url 'blog:blog_detail'  comment.comment_to_which_blog_id %}">评论于博文：{{ comment.comment_to_which_blog.title }}</a>
         <div style="margin-left: 20px">

@@ -10,7 +10,15 @@
             {% if comment.comment_is_not_read == 1 %}
 
                 <a style="font-size: 18px;font-weight: bold" href="
-                {% url 'blog:blog_detail'  comment.comment_to_which_blog_id %}">评论于博文：{{ comment.comment_to_which_blog.title }}</a>
+                {% url 'blog:blog_detail'  comment.comment_to_which_blog_id %}">
+                    {{ comment.comment_creater_id }}
+                    {#  如果评论于评论 #}
+                    {% if comment.comment_to_which_Comment %}
+                        评论你的回复于博文:{{ comment.comment_to_which_blog.title }}
+                    {% else %}
+                        评论于博文：{{ comment.comment_to_which_blog.title }}
+                    {% endif %}
+                </a>
                 <div style="margin-left: 20px">
                     <p>时间:{{ comment.comment_time }}</p>
                     <div style="margin-left: 20px">
@@ -40,7 +48,14 @@
         <div class="read_div" style="display: none">
             {% if comment.comment_is_not_read == 0 %}
                 <a style="font-size: 18px;font-weight: bold" href="
-                {% url 'blog:blog_detail'  comment.comment_to_which_blog_id %}">评论于博文：{{ comment.comment_to_which_blog.title }}</a>
+                {% url 'blog:blog_detail'  comment.comment_to_which_blog_id %}">
+                    {{ comment.comment_creater_id }}
+                    {#  如果评论于评论 #}
+                    {% if comment.comment_to_which_Comment %}
+                        评论你的回复于博文:{{ comment.comment_to_which_blog.title }}
+                    {% else %}
+                        评论于博文：{{ comment.comment_to_which_blog.title }}
+                    {% endif %}</a>
                 <div style="margin-left: 20px">
                     <p>时间:{{ comment.comment_time }}</p>
                     <div style="margin-left: 20px">

@@ -1,7 +1,8 @@
 from django.shortcuts import redirect
 
 # 判断有没有登陆
-from blog.models import Nav
+from blog.models import Nav, BlogPostModel
+from society.models import Comment
 from users.models import UserModel
 
 
@@ -58,3 +59,25 @@ def get_biyaode_dict(request):
     data['user'] = user
     data['navs'] = navs
     return data
+
+
+# 刷新博客评论数量 添加或删除
+def refresh_blog_comment_num(blog_id, method='add'):
+    blog = BlogPostModel.objects.filter(pk=blog_id).first()
+    if method == 'add':
+        blog.comment_num += 1
+        blog.save()
+    elif method == 'minus' and blog.comment_num >= 1:
+        blog.comment_num -= 1
+        blog.save()
+    else:
+        raise Exception('添加/减少评论次数操作不合法')
+
+
+# 刷新所有的博客评论数量
+def refresh_all_blog_comment_num():
+    blogs = BlogPostModel.objects.all()
+    for blog in blogs:
+        num = Comment.objects.filter(comment_to_which_blog_id=blog.id).count()
+        blog.comment_num = num
+        blog.save()

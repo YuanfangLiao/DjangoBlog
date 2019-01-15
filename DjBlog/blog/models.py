@@ -44,13 +44,14 @@ class BlogPostModel(models.Model):
     content = models.TextField(verbose_name=u'正文')
     view_times = models.IntegerField(default=0)
     zan_times = models.IntegerField(default=0)
+    comment_num = models.IntegerField(default=0)
 
     is_top = models.BooleanField(default=False, verbose_name=u'置顶')
     rank = models.IntegerField(default=0, verbose_name=u'排序')
     status = models.IntegerField(default=0, choices=STATUS.items(),
                                  verbose_name='状态')
     create_time = models.DateTimeField(u'创建时间', auto_now_add=True)
-    update_time = models.DateTimeField(u'更新时间', auto_now=True)
+    update_time = models.DateTimeField(u'更新时间', auto_now_add=True)
 
     def get_tags(self):
         self.tags.replace('\ ', ',')
@@ -65,4 +66,4 @@ class BlogPostModel(models.Model):
 class Swipers(models.Model):
     swiper_img_url = models.TextField(max_length=100, null=False)
     swiper_url = models.TextField(max_length=100, null=True)
-    swiper_title = models.TextField(max_length=100, null=True)
+    swiper_title = models.TextField(max_length=100, null=True, default='默认标题')

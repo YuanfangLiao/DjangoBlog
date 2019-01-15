@@ -6,7 +6,7 @@ from django.urls import reverse
 
 import blog
 from society.models import Comment
-from users.functions import check_logined
+from users.functions import check_logined, refresh_blog_comment_num
 from users.functions import get_User_Model
 
 
@@ -24,6 +24,7 @@ def add_comment_to_blog(request):
         # 如果为对博客的评论，type为0 否则type表示评论的id
         if post_type == "0":
             comment.comment_type = 0
+            comment.comment_is_not_read = 1
         else:
             comment.comment_type = 1
             comment.comment_is_not_read = 1
@@ -31,6 +32,7 @@ def add_comment_to_blog(request):
 
         try:
             comment.save()
+            refresh_blog_comment_num(comment.comment_to_which_blog_id, 'add')
             return redirect(reverse('blog:blog_detail', args=(blog_id,)))
         except Exception as e:
             print(str(e))
@@ -44,6 +46,7 @@ def del_comment(request, comment_id):
     blog_id = comment.comment_to_which_blog_id
     try:
         comment.delete()
+        refresh_blog_comment_num(comment.comment_to_which_blog_id, 'minus')
         return redirect(reverse('blog:blog_detail', args=(blog_id,)))
     except Exception as e:
         print(str(e))
@@ -57,6 +60,7 @@ def ajax_del_comment(request):
         comment = Comment.objects.filter(pk=comment_id).first()
         try:
             comment.delete()
+            refresh_blog_comment_num(comment.comment_to_which_blog_id, 'minus')
             return JsonResponse({'code': 200})
         except Exception as e:
             print(str(e))

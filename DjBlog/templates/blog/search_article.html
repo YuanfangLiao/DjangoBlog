@@ -25,7 +25,8 @@
                                 <span class="glyphicon glyphicon-calendar"></span> {{ blog.create_time|date:"Y-m-d" }}
                             </time>
                             •
-                            <span class="carousel">分类：<a href="#">{{ blog.carousel_id }}</a></span>
+                            <span class="carousel">分类：<a href="/blog/order_blog/{{ blog.carousel_id }}/default">
+                                {{ blog.carousel_id }}</a></span>
                         </div>
                     </div>
                     <div class="post-content">

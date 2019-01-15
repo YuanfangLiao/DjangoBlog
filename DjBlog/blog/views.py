@@ -1,5 +1,8 @@
+import base64
 import os
 import random
+import logging
+import uuid
 
 import markdown
 from PIL import Image
@@ -12,6 +15,7 @@ from django.shortcuts import render, get_object_or_404
 
 # 加载主页
 from DjBlog import settings
+from DjBlog.settings import BASE_DIR
 from blog.models import CarouselModel, BlogPostModel, Nav, Swipers
 from society.models import Comment
 from users.functions import check_logined, get_uid, only_admin_go, get_biyaode_dict
@@ -153,7 +157,7 @@ def blog_detail(request, blog_id):
             if user.user_img:
                 imgUrl = '/static/upload/' + user.user_img.url
                 data['imgUrl'] = imgUrl
-
+        print(blog.update_time)
         post = get_object_or_404(BlogPostModel, pk=blog_id)
         # 记得在顶部引入 markdown 模块
         post.body = markdown.markdown(post.content,
@@ -219,6 +223,8 @@ def del_blog(request):
 
         try:
             blog.save()
+            carousel = CarouselModel.objects.all().filter(pk=blog.carousel_id).first()
+            carousel.total_number = BlogPostModel.objects.filter(carousel_id=carousel.title).filter(status=0).count()
             return JsonResponse({'code': 200})
         except Exception as e:
             return JsonResponse({'code': 500, 'msg': str(e)})
@@ -234,6 +240,8 @@ def recovery_blog(request):
         blog.status = 0
         try:
             blog.save()
+            carousel = CarouselModel.objects.all().filter(pk=blog.carousel_id).first()
+            carousel.total_number = BlogPostModel.objects.filter(carousel_id=carousel.title).filter(status=0).count()
             return JsonResponse({'code': 200})
         except Exception as e:
             return JsonResponse({'code': 500, 'msg': str(e)})
@@ -259,6 +267,7 @@ def do_post_new_blog(request):
             blog.content = blog_content
             blog.tags = blog_tags
             blog.carousel_id = blog_carousel
+            blog.status = 0
             summmary = ''.join(blog_content.split())
             # 如果文字长度大于30，摘要为前30个字，如果小于30，就为文章本身
             if len(summmary) >= 100:
@@ -271,11 +280,11 @@ def do_post_new_blog(request):
             try:
                 blog.save()
                 # 刷新分类数据
-                carousel_count_old = BlogPostModel.objects.filter(carousel_id=old_carousel).count()
+                carousel_count_old = BlogPostModel.objects.filter(carousel_id=old_carousel).filter(status=0).count()
                 carouse_old = CarouselModel.objects.filter(pk=old_carousel).first()
                 carouse_old.total_number = carousel_count_old
                 carouse_old.save()
-                carousel_count = BlogPostModel.objects.filter(carousel_id=blog_carousel).count()
+                carousel_count = BlogPostModel.objects.filter(carousel_id=blog_carousel).filter(status=0).count()
                 carouse = CarouselModel.objects.filter(pk=blog_carousel).first()
                 carouse.total_number = carousel_count
                 carouse.save()
@@ -308,7 +317,7 @@ def do_post_new_blog(request):
 
         try:
             new_blog.save()
-            carousel_count = BlogPostModel.objects.filter(carousel_id=blog_carousel).count()
+            carousel_count = BlogPostModel.objects.filter(carousel_id=blog_carousel).filter(status=0).count()
             carouse = CarouselModel.objects.filter(pk=blog_carousel).first()
             carouse.total_number = carousel_count
             carouse.save()
@@ -543,3 +552,105 @@ def aboutme(request):
     data = get_biyaode_dict(request)
 
     return render(request, 'blog/aboutme.html', data)
+
+
+def dianzan(request):
+    blog_id = request.GET.get('blog_id')
+    blog = BlogPostModel.objects.all().filter(pk=blog_id).first()
+    # blog = BlogPostModel()
+    zan_times = blog.zan_times
+    zan_times += 1
+    data = {}
+    try:
+        blog.zan_times = zan_times
+        blog.save()
+        data['code'] = 200
+        data['zan_times'] = zan_times
+        return JsonResponse(data)
+    except Exception as e:
+        print(str(e))
+        data['code'] = 500
+        return JsonResponse(data)
+
+
+def do_create_swiper(request):
+    # 本地保存头像
+    data = request.POST['tx']
+    if not data:
+        return HttpResponse(u"上传轮播图错误，图片为空", status=500)
+
+    imgData = base64.b64decode(data)
+    filename = "swiper_1024x576_{}.png".format(uuid.uuid4())
+    static_root = getattr(settings, 'STATIC_ROOT', None)
+    filedir = os.path.join(static_root, 'upload/swipers')
+
+    print(filedir)
+    path = os.path.join(filedir, filename)
+
+    file = open(path, "wb+")
+    file.write(imgData)
+    file.flush()
+    file.close()
+
+    # 修改头像分辨率
+    im = Image.open(path)
+    out = im.resize((1024, 576), Image.ANTIALIAS)
+    try:
+        out.save(path)
+        swiper = Swipers()
+        swiper.swiper_img_url = '/static/upload/swipers/' + filename
+        swiper.save()
+    except Exception as e:
+        print(e)
+        return HttpResponse(u"上传轮播图失败!\n错误代码:" + str(e))
+
+    return HttpResponse(u"上传轮播图成功!刷新页面\n可能会有缓存！")
+
+
+def edit_swiper(request):
+    if request.method == "POST":
+        method = request.POST.get('method')
+        data = {}
+        if method == 'edit':
+            swiper_id = request.POST.get('swiper_id')
+            swiper_title = request.POST.get('swiper_title')
+            swiper_url = request.POST.get('swiper_url')
+            # 如果title或url有值的变化，就修改，否则退出
+            if swiper_title or swiper_url:
+                swiper = Swipers.objects.all().filter(pk=swiper_id).first()
+                if swiper_title:
+                    swiper.swiper_title = swiper_title
+                if swiper_url:
+                    swiper.swiper_url = swiper_url
+                try:
+                    swiper.save()
+                    data['code'] = 200
+                    data['msg'] = '保存成功'
+                    return JsonResponse(data)
+                except Exception as e:
+                    print(str(e))
+                    data['code'] = 500
+                    data['msg'] = '数据库保存失败'
+                    return JsonResponse(data)
+            else:
+                data['code'] = 200
+                data['msg'] = '没有任何修改'
+                return JsonResponse(data)
+        elif method == 'del':
+            swiper_id = request.POST.get('swiper_id')
+            swiper = Swipers.objects.all().filter(pk=swiper_id).first()
+            img_url = swiper.swiper_img_url
+            real_url = BASE_DIR + img_url
+            print(real_url)
+            if real_url:
+                os.remove(real_url)
+            try:
+                swiper.delete()
+                data['code'] = 200
+                data['msg'] = '删除成功'
+                return JsonResponse(data)
+            except Exception as e:
+                print(str(e))
+                data['code'] = 500
+                data['msg'] = '数据库删除失败'
+                return JsonResponse(data)

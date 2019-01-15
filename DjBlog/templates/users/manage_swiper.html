@@ -4,7 +4,6 @@
     #change-tx h1 {
         font-size: 26px;
         font-weight: bold;
-        border-bottom: 1px solid #eee;
     }
 
     .change-tx-left {
@@ -53,41 +52,189 @@
         margin-right: 20px;
     }
 
-</style>
+    #change-tx {
+        display: none;
+    }
 
-轮播图管理功能仍在完善中，若要设置轮播图，可以将图片存到/static/img下，并修改index.html即可。
-轮播图的集中管理将在12月上线，敬请期待。
-{#<div id="change-tx" class="well clearfix">#}
-{#    <h1>添加轮播图</h1>#}
-{#    <div>#}
-{#        <div class="change-tx-left">#}
-{#            <div class="screen-tx">#}
-{#                <img id="tmp-tx" src="" alt="">#}
-{#            </div>#}
-{#            <form role="form" id="upload-tx-form">#}
-{#                <div class="form-group">#}
-{#                    <table>#}
-{#                        <tr>#}
-{#                            <td><input type="button" id="save-tx" class="btn btn-warning btn-vmaig-auth" value="保存头像">#}
-{#                            </td>#}
-{#                            <td>#}
-{#                                <button type="button" id="choose_img" class="btn btn-info">选择图片#}
-{#                                    <input type="file" style="width: 80px" id="upload-tx" name="upload-tx"></button>#}
-{#                            </td>#}
-{#                        </tr>#}
-{#                    </table>#}
-{##}
-{##}
-{#                </div>#}
-{#            </form>#}
-{#        </div>#}
-{#    </div>#}
-{##}
-{#</div>#}
+    #all_content {
+        padding: 30px;
+    }
+</style>
+<div id="all_content">
+    <div class="btn-group" role="group" aria-label="...">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-default" id="add_swiper">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp;添加轮播图
+        </button>
+        <button type="button" class="btn btn-default disabled" id="back">返回
+        </button>
+    </div>
+    <br/>
+    <hr/>
+    <div id="papare-change-tx">
+        {% for swiper in swipers %}
+            <div style="float: right;font-size: 12px;margin-top: 0px;margin-right: 30px">
+                <a href="#" class="edit_info" data-toggle="modal" data-target="#myModal">修改信息</a>&nbsp;|
+                <a href="javascript:void(0)" class="del_nav">删除</a>&nbsp;
+            </div>
+            <table>
+                <tr>
+                    <td><img src="{{ swiper.swiper_img_url }}" width="150px"></td>
+                    <td style="padding-left: 30px">
+                        <h1 style="font-size:23px;color: #0f0f0f">
+                            ID:<span class="swiper_id">{{ swiper.id }}</span>
+                            {{ swiper.swiper_title }}</h1>
+                        <small>url:{% if swiper.swiper_url %}
+                            {{ swiper.swiper_url }}
+                        {% else %}
+                            未设置url
+                        {% endif %}</small>
+                    </td>
+                </tr>
+            </table>
+            <hr/>
+        {% endfor %}
+    </div>
+    <div id="change-tx" class="well clearfix">
+        <h1>添加轮播图Beta</h1>
+        <h4>tip:请不要使用过大的图片</h4>
+        <hr/>
+        <div>
+            <div class="change-tx-left">
+                <div class="screen-tx">
+                    <img id="tmp-tx" src="" alt="">
+                </div>
+                <form role="form" id="upload-tx-form">
+                    <div class="form-group">
+                        <table>
+                            <tr>
+                                <td><input type="button" id="save-tx" class="btn btn-warning btn-vmaig-auth"
+                                           value="保存图片">
+                                </td>
+                                <td>
+                                    <button type="button" id="choose_img" class="btn btn-info">选择图片
+                                        <input type="file" style="width: 80px" id="upload-tx" name="upload-tx"></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 弹出框 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="close_box" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改轮播图信息</h4>
+            </div>
+            <div class="modal-body">
+                <label for="swiper_id">轮播图ID</label>
+                <input type="text" class="form-control" disabled="disabled" id="swiper_id" placeholder="轮播图ID">
+                <br/>
+                <label for="swiper_title">轮播图名称</label>
+                <input type="text" class="form-control" id="swiper_title" placeholder="新轮播图名称">
+                <br/>
+                <label for="swiper_url">轮播图url</label>
+                <input type="text" class="form-control" id="swiper_url" placeholder="新轮播图url">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="submit_change">提交修改</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script>
     $(function () {
+        $('.edit_info').click(function () {
+            let this_swiper_id = $(this).parent().next().find('.swiper_id').html();
+            $('#swiper_id').val(this_swiper_id);
+        });
+        $('.del_nav').click(function () {
+            let this_swiper_id = $(this).parent().next().find('.swiper_id').html();
+            if (confirm('是否删除轮播图，id：' + this_swiper_id)) {
+                data = {}
+                data['swiper_id'] = this_swiper_id;
+                data['method'] = 'del';
+                $.ajax({
+                    method: 'post',
+                    url: '/blog/edit_swiper',
+                    type: 'json',
+                    data: data,
+                    success: function (data) {
+                        if (data['code'] == 200) {
+                            alert('成功:' + data['msg']);
+                            // 隐藏弹出框
+                            $('#myModal').modal('hide');
+                            $('.modal-backdrop').remove();
+                            $('#personal_center_content').load('/users/manage_swiper/')
+                        } else {
+                            alert('错误,错误代码：' + data['code'] + ':' + data['msg'])
+                        }
+                    },
+                    error: function () {
+                        alert('ajax错误')
+                    }
+                })
+            }
+        });
+        $('#submit_change').click(function () {
+            let swiper_title = $('#swiper_title').val();
+            let swiper_url = $('#swiper_url').val();
+            let swiper_id = $('#swiper_id').val();
+
+            let data = {};
+            data['swiper_id'] = swiper_id;
+            data['swiper_title'] = swiper_title;
+            data['swiper_url'] = swiper_url;
+            data['method'] = 'edit';
+
+            $.ajax({
+                method: 'post',
+                url: '/blog/edit_swiper',
+                type: 'json',
+                data: data,
+                success: function (data) {
+                    if (data['code'] == 200) {
+                        alert('成功:' + data['msg']);
+                        // 隐藏弹出框
+                        $('#myModal').modal('hide');
+                        $('.modal-backdrop').remove();
+                        $('#personal_center_content').load('/users/manage_swiper/')
+                    } else {
+                        alert('错误,错误代码：' + data['code'] + ':' + data['msg'])
+                    }
+
+                },
+                error: function () {
+                    alert('ajax错误')
+                }
+
+            })
+
+        });
+
+        $('#add_swiper').click(function () {
+            $('#papare-change-tx').hide();
+            $('#add_swiper').addClass('disabled');
+            $('#back').removeClass('disabled');
+            $('#change-tx').show();
+        });
+        $('#back').click(function () {
+            $('#change-tx').hide();
+            $('#back').addClass('disabled');
+            $('#add_swiper').removeClass('disabled');
+            $('#papare-change-tx').show();
+        });
+
         $(".list-group-item").removeClass('active');
         $('#change_img').addClass('active');
 
@@ -98,7 +245,7 @@
         $('#tmp-tx').Jcrop({
                 onChange: updatePreview,
                 onSelect: updatePreview,
-                aspectRatio: 1,
+                aspectRatio: 16 / 9,
                 boxWidth: 400,
                 boxHeight: 300
             },
@@ -128,7 +275,6 @@
                     boundy = this.height;
                 });
 
-                //console.log("boundx:" + boundx + " boundy:" + boundy);
             }
 
 
@@ -160,7 +306,7 @@
             fd.append('file', blob);
             {#console.log(canvas.toDataURL().split(',')[1])#}
             $.ajax({
-                url: "{% url 'users:do_change_img' %}",
+                url: "{% url 'blog:do_create_swiper' %}",
                 type: "POST",
                 data: {"tx": canvas.toDataURL().split(',')[1]},
                 beforeSend: function (xhr) {

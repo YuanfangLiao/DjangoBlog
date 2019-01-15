@@ -6,10 +6,10 @@
     <div id="inthecontent" style="padding: 20px;font-size: 12px">
         <ol class="breadcrumb">
             <li><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;Home</a></li>
-            <li><a href="">{{ post.carousel_id }}</a></li>
-            <li><span class="glyphicon glyphicon-calendar"></span>&nbsp;{{ post.update_time|date:"Y-m-d" }}</li>
-            <li><span class="glyphicon glyphicon-eye-open"></span>&nbsp;{{ post.view_times }}</li>
-            <li style="float: right"><span class="glyphicon glyphicon-user"></span></span>&nbsp;{{ post.author_id }}
+            <li><a href="/blog/order_blog/{{ post.carousel.title }}/default">{{ blog.carousel_id }}</a></li>
+            <li><span class="glyphicon glyphicon-calendar"></span>&nbsp;{{ blog.update_time|date:"Y-m-d" }}</li>
+            <li><span class="glyphicon glyphicon-eye-open"></span>&nbsp;{{ blog.view_times }}</li>
+            <li style="float: right"><span class="glyphicon glyphicon-user"></span>&nbsp;{{ blog.author_id }}
             </li>
         </ol>
         &nbsp;
@@ -29,16 +29,24 @@
 
         <div class="page-header" style="font-size: 45px">
             <h1>{{ post.title }}<br/>
-                <small>{{ post.en_title }}</small>
+                <small>{% if post.en_title != 'None' and post.en_title %}{{ post.en_title }}{% endif %}</small>
             </h1>
         </div>
 
         <div class="markdown-body" style="padding: 20px;">
             {{ post.body|safe }}
         </div>
+        <hr/>
+        <p style="float: right">觉得不错？不如点个&nbsp;&nbsp;
+            <img id="dianzan" src="/static/img/dianzan.png" style="margin-bottom: 7px" width="20px"/>&nbsp;&nbsp;
+            <span id="zan_times">{{ post.zan_times }}</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </p>
+
+        <br/>
     </div>
     <br/>
-    <div style="width:100%; background-color:white;padding: 20px;font-size: 12px">
+    <div id="comment_div" style="width:100%; background-color:white;padding: 20px;font-size: 12px">
         <table width="100%">
             <tr>
                 <td>
@@ -133,6 +141,26 @@
             $('#post_type').attr('value', commentid);
             $('#comment').val('回复' + username + ':')
         });
+
+        $('#dianzan').click(function () {
+            data = {'blog_id': '{{ post.id }}'};
+            $.ajax({
+                url: '{% url "blog:dianzan" %}',
+                type: 'get',
+                data: data,
+                success: function (data) {
+                    if (data['code'] === 200) {
+                        $('#zan_times').text(data['zan_times'])
+                    }
+                    else {
+                        console.log(data['code'])
+                    }
+                },
+                error: function () {
+                    console.log('error')
+                }
+            })
+        })
 
     </script>
 {% endblock %}

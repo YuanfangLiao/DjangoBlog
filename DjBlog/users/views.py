@@ -7,6 +7,7 @@ import random
 import re
 
 from PIL import Image, ImageDraw, ImageFont
+from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
@@ -14,7 +15,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from DjBlog import settings
-from blog.models import Nav, BlogPostModel, CarouselModel
+from blog.models import Nav, BlogPostModel, CarouselModel, Swipers
 from society.models import Comment
 from users.functions import get_uid, check_logined, get_biyaode_dict, get_User_Model
 from users.models import UserModel
@@ -62,6 +63,7 @@ def do_register(request):
     new_user.user_passwd = new_user_passwd
     new_user.user_email = new_user_email
     new_user.user_sex = new_user_sex
+    new_user.user_img = "users/favicon.png"
 
     try:
         new_user.save()
@@ -210,8 +212,10 @@ def go_personal_center(request):
     navs = Nav.objects.all()
 
     all_my_posted_comments = Comment.objects.filter(comment_creater=user)
-    my_comments_num = Comment.objects.filter(comment_to_which_Comment__in=all_my_posted_comments).filter(
-        comment_is_not_read=1).count()
+    all_my_blogs = BlogPostModel.objects.all().filter(author=user)
+    my_comments_num = Comment.objects.all().filter(comment_is_not_read=True). \
+        filter(Q(comment_to_which_Comment__in=all_my_posted_comments) |
+               Q(comment_to_which_blog__in=all_my_blogs)).count()
     data = {
         'uid': uid,
         'user': user,
@@ -250,11 +254,11 @@ def manage_article(request):
         where = request.GET.get('where')
         # 判断文章状态
         if where == 'deleted':
-            blogs = BlogPostModel.objects.filter(status=2).filter(author=user)
+            blogs = BlogPostModel.objects.filter(status=2).filter(author=user).order_by('-create_time')
         elif where == 'drafts':
-            blogs = BlogPostModel.objects.filter(status=1).filter(author=user)
+            blogs = BlogPostModel.objects.filter(status=1).filter(author=user).order_by('-create_time')
         else:
-            blogs = BlogPostModel.objects.filter(status=0).filter(author=user)
+            blogs = BlogPostModel.objects.filter(status=0).filter(author=user).order_by('-create_time')
 
         data = {"user": user,
                 'blogs': blogs
@@ -271,7 +275,7 @@ def do_change_img(request):
     data = request.POST['tx']
     if not data:
         logger.error(
-            u'[UserControl]用户上传头像为空:[%s]'.format(
+            u'[UserControl]轮播图上传头像为空:[%s]'.format(
                 request.user.username
             )
         )
@@ -389,9 +393,8 @@ def do_change_password(request):
 def go_my_comment(request):
     user = get_User_Model(request)
     data = {"user": user}
-    my_comments = Comment.objects.filter(comment_creater=user)
+    my_comments = Comment.objects.filter(comment_creater=user).order_by('-comment_time')
     all_comments = Comment.objects.all()
-    print('111')
     data['my_comments'] = my_comments
     data['all_comments'] = all_comments
     return render(request, 'users/my_comment.html', context=data)
@@ -402,8 +405,12 @@ def go_my_message(request):
     user = get_User_Model(request)
     data = {"user": user}
     # 这里要的是未读信息
-    all_my_posted_comments = Comment.objects.filter(comment_creater=user)
-    my_comments = Comment.objects.filter(comment_to_which_Comment__in=all_my_posted_comments)
+    all_my_posted_comments = Comment.objects.all().filter(comment_creater=user)
+    all_my_blogs = BlogPostModel.objects.all().filter(author=user)
+    my_comments = Comment.objects.all(). \
+        filter(Q(comment_to_which_Comment__in=all_my_posted_comments) |
+               Q(comment_to_which_blog__in=all_my_blogs)). \
+        order_by('-comment_time')
     all_comments = Comment.objects.all()
     data['my_comments'] = my_comments
     data['all_comments'] = all_comments
@@ -435,7 +442,7 @@ def do_send_email_verification_code(request):
 # 管理分类表
 @check_logined
 def manage_carousel(request):
-    carousels = CarouselModel.objects.all().order_by('title')
+    carousels = CarouselModel.objects.all().order_by('total_number')
     data = {}
     data['carousels'] = carousels
     return render(request, 'users/manage_carousel.html', context=data)
@@ -451,4 +458,7 @@ def manage_nav(request):
 
 @check_logined
 def manage_swiper(request):
-    return render(request, 'users/manage_swiper.html')
+    swipers = Swipers.objects.all()
+    data = {}
+    data['swipers'] = swipers
+    return render(request, 'users/manage_swiper.html', context=data)
