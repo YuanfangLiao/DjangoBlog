@@ -72,6 +72,10 @@
                 data: {'blog_id': blogid, 'del_method': del_method},
                 method: 'post',
                 dataType: 'json',
+                // ajax  csrf补丁
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                },
                 success: function (data) {
                     if (data['code'] == 200) {
                         alert('删除成功');
@@ -95,6 +99,10 @@
                 data: {'blog_id': blogid},
                 method: 'post',
                 dataType: 'json',
+                // ajax  csrf补丁
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                },
                 success: function (data) {
                     if (data['code'] == 200) {
                         alert('恢复成功');

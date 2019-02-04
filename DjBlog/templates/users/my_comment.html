@@ -53,6 +53,10 @@
                     type: 'post',
                     data: data1,
                     dataType: 'json',
+                    // ajax  csrf补丁
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                    },
                     success: function (data) {
                         if (data['code'] == 200) {
                             $('#personal_center_content').load('/users/go_my_comment')

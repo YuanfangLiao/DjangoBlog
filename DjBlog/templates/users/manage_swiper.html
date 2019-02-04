@@ -169,6 +169,10 @@
                     url: '/blog/edit_swiper',
                     type: 'json',
                     data: data,
+                    // ajax  csrf补丁
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                    },
                     success: function (data) {
                         if (data['code'] == 200) {
                             alert('成功:' + data['msg']);
@@ -202,6 +206,10 @@
                 url: '/blog/edit_swiper',
                 type: 'json',
                 data: data,
+                // ajax  csrf补丁
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                },
                 success: function (data) {
                     if (data['code'] == 200) {
                         alert('成功:' + data['msg']);
@@ -309,6 +317,7 @@
                 url: "{% url 'blog:do_create_swiper' %}",
                 type: "POST",
                 data: {"tx": canvas.toDataURL().split(',')[1]},
+
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
                 },

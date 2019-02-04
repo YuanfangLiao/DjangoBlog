@@ -99,7 +99,7 @@
                 'blog_content': blog_content,
                 'blog_tags': blog_tags,
                 'blog_carousel': blog_carousel,
-                'post_or_draft':post_or_draft,
+                'post_or_draft': post_or_draft,
                 'csrfmiddlewaretoken': '{{ csrf_token }}',
             };
             console.log(trans_data['eng_title']);
@@ -111,7 +111,11 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data['code'] === 200) {
-                        alert('恭喜，发布博客成功');
+                        if(post_or_draft === '存入草稿'){
+                            alert('存入草稿成功');
+                        }else {
+                            alert('恭喜，发布博客成功');
+                        }
                         window.open('/blog/', target = '_self')
                     } else {
                         alert('服务器错误,code:' + data['code'] + ' ,msg:' + data['msg'])
@@ -135,7 +139,7 @@
                     height: 730,
                     {#path: 'lib/',#}
                     path: '{% static 'plugins/editor-1.md-master/lib/' %}',
-                    markdown: md,
+                    markdown: '#请在这里编写你的文章',
                     codeFold: true,
                     saveHTMLToTextarea: true,
                     searchReplace: true,

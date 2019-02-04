@@ -74,6 +74,10 @@
                 url: '/blog/edit_nav',
                 type: 'json',
                 data: data,
+                // ajax  csrf补丁
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                },
                 success: function (data) {
                     if (data['code'] == 200) {
                         alert('添加成功');
@@ -130,13 +134,17 @@
                 url: '/blog/edit_nav',
                 type: 'json',
                 data: data,
+                // ajax  csrf补丁
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                },
                 success: function (data) {
                     if (data['code'] == 200) {
                         alert('删除成功');
                         // 隐藏弹出框
                         $('#myModal').modal('hide');
                         $('.modal-backdrop').remove();
-                        $('#personal_center_content').load('/users/manage_carousel')
+                        $('#personal_center_content').load('/users/manage_nav')
                     } else {
                         alert('错误,错误代码：' + data['code'] + data['msg'])
                     }
@@ -174,6 +182,10 @@
             url: '/blog/edit_nav',
             type: 'json',
             data: data,
+            // ajax  csrf补丁
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+            },
             success: function (data) {
                 if (data['code'] == 200) {
                     // 隐藏弹出框

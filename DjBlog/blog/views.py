@@ -202,6 +202,7 @@ def edit_blog(request):
         data['uid'] = uid
         data['user'] = user
         data['blog'] = blog
+        data['navs'] = Nav.objects.all()
         carousels = CarouselModel.objects.all()
         data['carousels'] = carousels
         return render(request, 'blog/edit_blog.html', context=data)
@@ -259,6 +260,7 @@ def do_post_new_blog(request):
         blog_tags = request.POST.get('blog_tags')
         blog_carousel = request.POST.get('blog_carousel')
         post_or_draft = request.POST.get('post_or_draft')
+        # 如果是编辑博客
         if request.POST.get('blog_id'):
             blog_id = request.POST.get('blog_id')
             blog = BlogPostModel.objects.filter(pk=blog_id).first()
@@ -267,7 +269,11 @@ def do_post_new_blog(request):
             blog.content = blog_content
             blog.tags = blog_tags
             blog.carousel_id = blog_carousel
-            blog.status = 0
+            # 如果仍然存入草稿箱
+            if post_or_draft == '存入草稿':
+                blog.status = 1
+            else:
+                blog.status = 0
             summmary = ''.join(blog_content.split())
             # 如果文字长度大于30，摘要为前30个字，如果小于30，就为文章本身
             if len(summmary) >= 100:

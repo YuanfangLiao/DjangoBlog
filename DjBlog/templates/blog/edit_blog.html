@@ -18,7 +18,7 @@
             <label class="col-sm-2 control-label" for="eng_title">English Title：</label>
             <div class="col-sm-10">
                 <input class="form-control" type="text" id="eng_title" placeholder="English Title"
-                       value="{{ blog.en_title }}">
+                       value="{% if blog.en_title and not blog.en_title == 'None' %}{{ blog.en_title }}{% endif %}">
             </div>
         </div>
     </form>
@@ -54,6 +54,10 @@
     <br/><br/>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <button type="button" class="btn btn-danger btn-lg" id="post_blog_go">保存博客</button>
+    {% if blog.status == 1 %}
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-info btn-lg" id="post_draft_go">存入草稿</button>
+    {% endif %}
 
 {% endblock %}
 
@@ -72,13 +76,14 @@
     <script>
         var testEditor;
 
-        $('#post_blog_go').click(function () {
+        $('#post_blog_go,#post_draft_go').click(function () {
             let blog_title = $('#blog_title').val();
             let eng_title = $('#eng_title').val();
             let blog_content = $('#blog_content').val();
             let blog_tags = $('#blog_tags').val();
             let blog_carousel = $('input[name=blog_carousel]:checked').val();
             let blog_id = '{{ blog.id }}';
+            let post_or_draft = $(this).text();
             if (!blog_title) {
                 alert('请输入博客标题');
                 return false;
@@ -103,7 +108,8 @@
                 'blog_tags': blog_tags,
                 'blog_carousel': blog_carousel,
                 'csrfmiddlewaretoken': '{{ csrf_token }}',
-                'blog_id': blog_id
+                'blog_id': blog_id,
+                'post_or_draft': post_or_draft,
             };
             console.log(trans_data['eng_title']);
             {#console.log(trans_data['blog_content']);#}

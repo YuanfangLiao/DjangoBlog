@@ -1,1 +1,9 @@
 DjBlog/.idea/
+DjBlog/blog/__pycache__/
+DjBlog/blog/migrations/__pycache__/
+DjBlog/DjBlog/__pycache__/
+DjBlog/DjBlog/settings.py
+DjBlog/society/__pycache__/
+DjBlog/society/migrations/__pycache__/
+DjBlog/users/__pycache__/
+DjBlog/users/migrations/__pycache__/

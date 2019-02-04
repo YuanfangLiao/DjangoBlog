@@ -41,7 +41,9 @@ def page_error(request):
 
 # 去注册界面
 def go_register_page(request):
-    return render(request, 'users/register_page.html')
+    return render(request, 'users/register_page.html',context={
+        'navs': Nav.objects.all(),
+    })
 
 
 # 注册
@@ -105,9 +107,12 @@ def go_login_page(request):
 
         return render(request, 'users/login_page.html', context={
             'uid': uid,
+            'navs': Nav.objects.all(),
         })
     else:
-        return render(request, 'users/login_page.html')
+        return render(request, 'users/login_page.html', context={
+            'navs': Nav.objects.all(),
+        })
 
 
 # 登陆操作
