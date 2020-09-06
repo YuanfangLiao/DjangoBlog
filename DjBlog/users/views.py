@@ -24,12 +24,12 @@ from users.sendEmail import EmailSender
 logger = logging.getLogger(__name__)
 
 
-def permission_denied(request):
+def permission_denied(request, exception):
     data = get_biyaode_dict(request)
     return render(request, '403.html', context=data)
 
 
-def page_not_found(request):
+def page_not_found(request, exception):
     data = get_biyaode_dict(request)
     return render(request, '404.html', context=data)
 
