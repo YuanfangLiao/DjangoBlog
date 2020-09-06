@@ -9,3 +9,5 @@ DjBlog/users/__pycache__/
 DjBlog/users/migrations/__pycache__/
 venv/
 */migrations/
+DjBlog/settings.py
+.idea/
